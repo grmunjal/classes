@@ -1,0 +1,296 @@
+\documentclass[a4paper]{article}
+
+\usepackage[margin=0.7in]{geometry}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{pxfonts}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{listings,fontspec}
+\usepackage{float}
+\usepackage{upgreek}
+\usepackage{ amssymb }
+\usepackage{titling}
+\usepackage{wrapfig}
+
+\setlength{\droptitle}{-9em}
+
+\lstset{
+  basicstyle=\small\ttfamily,
+  language= R,
+  frame=single,
+  numbers=none,
+  showstringspaces=false
+}
+\lstloadlanguages{R}
+\lstset{escapeinside={(*@}{@*)}}
+
+
+\title{Homework 7}
+
+\author{Gitanshu Munjal}
+
+\date{December 4, 2014}
+
+\begin{document}
+\maketitle
+
+\section{Poisson regression}
+
+\subsection{}[10] Explain why a Poisson family would be appropriate for the model.\\
+\\The response variable in the current study consists of \textbf{counts} (number of individuals of a relatively rare mammal) from \textbf{randomly (haphazardly) chosen locations}. The expected distribution for such a variable is likely a Poisson distribution as by definiton a Poisson distribution is a \textbf{discrete probability distribution for counts} of occurence of rare events (number of individuals of a relatively rare mammal) over a time/space interval.   
+
+\begin{center}
+\line(1,0){250}
+\end{center}
+
+\subsection{}[20] Follow the reading (Chapter 9 of Zuur et al. 2009) pages 221-224 and build a suitable model for the data. Start with a full model that includes:
+
+river, road, cover, tveg, river:road, river:cover and road:cover. Report each step in the variable selection. In order to keep an interaction, both interacting factors should be included in the model. Report the final model.
+\subsubsection{Code and Relevant Output}
+\begin{lstlisting}[language=R]
+setwd("C:\\Users\\Gitanshu\\Desktop")
+exotia <- read.table("hw7.txt",header=T,sep=",")
+
+m1 <- glm(nrrm~river+tveg+road+cover+river:road+river:cover+road:cover,
+          family=poisson,data=exotia)
+
+drop1(m1,test="Chi")
+\end{lstlisting}
+\begin{lstlisting}[language=R,frame=none]
+Single term deletions
+
+Model:
+nrrm ~ river + tveg + road + cover + river:road + river:cover + 
+    road:cover
+            Df Deviance    AIC    LRT Pr(>Chi)  
+<none>           113.03 391.06                  
+tveg         4   115.84 385.87 2.8104  0.59004  
+river:road   1   117.42 393.45 4.3962  0.03602 *
+river:cover  1   115.75 391.78 2.7223  0.09895 .
+road:cover   1   113.12 389.15 0.0979  0.75440  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+\end{lstlisting}
+The \textbf{significance (not-significant) and single term deletion (lower AIC without tveg)} results shown above make the case for \textbf{removing tveg from the overall model} to improve model fit. The above presented cycle was repeated by a stepwise removal of model terms and the model was reduced to reach a final model with the lowest AIC. The same result is automated and done faster by using the step() command in the following section.
+\pagebreak
+\begin{lstlisting}[language=R]
+step(m1)
+\end{lstlisting}
+\begin{lstlisting}[language=R,frame=none]
+Start:  AIC=391.06
+nrrm ~ river + tveg + road + cover + river:road + river:cover + 
+    road:cover
+
+              Df Deviance    AIC
+- tveg         4   115.84 385.87
+- road:cover   1   113.12 389.15
+<none>             113.03 391.06
+- river:cover  1   115.75 391.78
+- river:road   1   117.42 393.45
+
+Step:  AIC=385.87
+nrrm ~ river + road + cover + river:road + river:cover + road:cover
+
+              Df Deviance    AIC
+- road:cover   1   116.00 384.03
+<none>             115.84 385.87
+- river:cover  1   118.69 386.71
+- river:road   1   119.13 387.15
+
+Step:  AIC=384.03
+nrrm ~ river + road + cover + river:road + river:cover
+
+              Df Deviance    AIC
+<none>             116.00 384.03
+- river:cover  1   118.82 384.85
+- river:road   1   119.36 385.39
+
+Call:  glm(formula = nrrm ~ river + road + cover + river:road + river:cover, 
+    family = poisson, data = exotia)
+
+Coefficients:
+(Intercept)        river         road        cover   river:road  river:cover  
+  -0.359746    -0.023844     0.060278     2.575014     0.006085    -0.104628  
+
+Degrees of Freedom: 99 Total (i.e. Null);  94 Residual
+Null Deviance:	    247.7 
+Residual Deviance: 116 	AIC: 384
+\end{lstlisting}
+\textbf{The final(reduced) model thus contains river + road + cover + river:road + river:cover. }
+\begin{center}
+\line(1,0){250}
+\end{center}
+
+
+\subsection{}[10] Use the dispersiontest() function of the AER package to determine if there is significant overdispersion.
+\subsubsection{Code and Relevant Output}
+\begin{lstlisting}[language=R]
+m3 <- glm(nrrm~river+road+cover+river:road+river:cover,family=poisson,data=exotia)
+
+library(AER)
+dispersiontest(m3)
+\end{lstlisting}
+\begin{lstlisting}[language=R,frame=none]
+Overdispersion test
+
+data:  m3
+z = 0.1683, p-value = 0.4332
+alternative hypothesis: true dispersion is greater than 1
+sample estimates:
+dispersion 
+  1.020997 
+\end{lstlisting}
+The non-significant p-value for the above presented Overdispersion test tells us that there was \textbf{no significant overdispersion} in our final model
+
+
+
+
+\subsection{}[10] In one or two sentences, what is overdispersion?\\
+\\Overdispersion describes the situation where the \textbf{variance for a given model is larger than expected}. In our case, we're assuming our counts are modeled like a Poisson distribution. A Poisson regression assumes that the mean and variance of the data are equal. Therefore, \textbf{in our case overdisperion is described as the situation where variance is greater than the mean (the mean is the expectation for variance based on the Poisson assumption).}
+\begin{center}
+\line(1,0){250}
+\end{center}
+
+
+
+\subsection{}[15] Follow the reading (Chapter 9 of Zuur et al. 2009) pages 228-231 to check for deviations of assumptions (what Zuur et al. refer to as "validation"). Report the graphs and one sentence interpretation for each graph.
+\subsubsection{Code And Relevant Output}
+\begin{lstlisting}[language=R]
+par(mfrow=c(2,2))
+plot(m3)
+\end{lstlisting}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{3.jpeg}\\
+\end{figure}
+The two plots on the left (Residuals Vs Fitted and Scale-Location) both show a definite pattern indicating that our assumptions regarding independence might be violated and/or that the current model is not good. The normal Q-Q plot does not show any signs of concern about normality except for a few outliers (which are also higlighted in the earlier mentioned two plots). The Residuals vs Leverage plot shows that there are a few data points that are influencing our model more than other data points.  
+
+
+\begin{lstlisting}[language=R]
+j1 <-m3
+ep <- resid(j1, type = "pearson")
+ed <- resid(j1, type = "deviance")
+mu <- predict(j1, type = "response")
+e  <- exotia$nrrm - mu
+par(mfrow = c(2,2))
+plot(x = mu, y = e, ylab = "Response residuals",xlab="Predicted count",main="Response")
+plot(x = mu, y = ep, ylab = "Pearson residuals",xlab="Predicted count",main="Pearson")
+plot(x = mu, y = ed, ylab = "Deviance residuals",xlab="Predicted count",main="Deviance")
+\end{lstlisting}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{1.jpeg}\\
+\end{figure}
+The pattern mentioned for residuals remains consistent through our analysis indicating an insufficient model and maybe a possibly missing covariate.
+\begin{center}
+\line(1,0){250}
+\end{center}
+\pagebreak
+
+\subsection{}[15] What is the effect of cover on the abundance of the mammal? Answer this by interpreting the corresponding coefficient in the model.
+\subsubsection{Code and Relevant Output}
+\begin{lstlisting}[language=R]
+summary(m3)
+\end{lstlisting}
+\begin{lstlisting}[language=R,frame=none]
+Call:
+glm(formula = nrrm ~ river + road + cover + river:road + river:cover, 
+    family = poisson, data = exotia
+
+Coefficients:
+             Estimate Std. Error z value Pr(>|z|)    
+(Intercept) -0.359746   0.371802  -0.968   0.3333    
+river       -0.023844   0.049758  -0.479   0.6318    
+road         0.060278   0.024249   2.486   0.0129 *  
+cover        (*@\textcolor{blue}{2.575014}@*)    0.446991   5.761 8.37e-09 ***
+river:road   0.006085   0.003355   1.814   0.0697 .  
+river:cover -0.104628   0.061876  -1.691   0.0908 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+\end{lstlisting}
+The poisson model is given by  
+$$Y_{i}\sim (\upmu_{i})$$
+$$E(Y_{i})=\upmu_{i}$$ 
+$$var(Y_{i})=\upmu_{i}$$
+$$\upmu_{i}=e^{\alpha + \beta_{1}X_{1}+...+\beta_{n}X_{n}}$$
+
+\begin{flushleft}
+Where,
+
+Y is the response variable
+\\$\upmu$ is the mean
+\\$\beta$ is the coefficient of X
+\\ X is the effect of an explanatory variable
+\\$\alpha$ is the slope for the model
+\linebreak Based on this model and the estimate for the coefficient (2.57) for cover in the model, we can conclude that there is a significant exponential effect of cover on the abundance of the mammal at the 95\% confidence level and that for every unit increasing in cover there is an $e^{2.6}$ increase in abundance. Indeed, this effect is evident in a plot of mammal counts against cover as shown below.  
+\end{flushleft}
+
+\begin{lstlisting}[language=R]
+library(ggplot2)
+ggplot(aes(x=cover,y=nrrm),data=exotia,xlab="Cover",ylab="Count")+
+  geom_point()+
+  geom_smooth(method=glm,family=poisson)+
+  labs(x="Cover",y="Count")
+\end{lstlisting}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.3\textwidth]{2.jpeg}\\
+\end{figure}
+
+\begin{center}
+\line(1,0){250}
+\end{center}
+\pagebreak
+
+
+\subsection{}[20] Interpret the effects of cover and river by making predictions for nrrm for a factorial combination of two reasonable values for each variable. Report a table with predictor and predicted values in both response and link scales. Use help("predict.glm") for details.
+\subsubsection{Code And Relevant Output}
+
+\begin{lstlisting}[language=R]
+newexo <- data.frame(river= rep(c(4.1,7.5),c(4,4)),
+                    road=rep(c(3.5,8.3),c(2,2)),cover= rep(c(0.27,0.6),c(1,1)))
+
+link<-t(t(predict(m3,newdata=newexo,type = "link")))
+response<-t(t(predict(m3,newdata=newexo,type = "response")))
+newexo<-cbind(newexo,link,response)
+newexo
+\end{lstlisting}
+\begin{lstlisting}[language=R,frame=none]
+river road cover        link response
+1   4.1  3.5  0.27 0.4202169 1.522292
+2   4.1  3.5  0.60 1.1284100 3.090738
+3   4.1  8.3  0.27 0.8293054 2.291726
+4   4.1  8.3  0.60 1.5374985 4.652936
+5   7.5  3.5  0.27 0.3155104 1.370959
+6   7.5  3.5  0.60 0.9063109 2.475175
+7   7.5  8.3  0.27 0.8239077 2.279390
+8   7.5  8.3  0.60 1.4147083 4.115286
+\end{lstlisting}
+The above table shows predictor(first 3 columns) and predicted values(column name = scale type).
+\begin{lstlisting}[language=R]
+ggplot(aes(x=cover,y=response),data=newexo)+
+  geom_point()+
+  labs(x="Cover",y="Response (Mammal Count)")
+\end{lstlisting}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.3\textwidth]{7.jpeg}\\
+\end{figure}
+\begin{flushleft}
+The above presented scatterplot shows the positive effect of cover on mammal abundance. This finding supports our significant results for cover although the exponential nature cannot be visualized here due to the fact that we only used two values for cover. Next we look ath effects of river on mammal abundance
+\end{flushleft}
+
+\begin{lstlisting}[language=R]
+ggplot(aes(x=river,y=response),data=newexo)+
+  geom_point()+
+  labs(x="River",y="Response (Mammal Count)")
+\end{lstlisting}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.3\textwidth]{8.pdf}\\
+\end{figure}
+The above presented scatterplot shows that there is no easily observable effect of river on mammal abundance. This finding supports our non-significant results for river.
+\end{document}
+
