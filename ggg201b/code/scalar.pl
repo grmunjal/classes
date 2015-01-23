@@ -1,5 +1,5 @@
 #!/usr/bin/perl 
-# scalar.pl by _insert_your_name_here_ 
+# scalar.pl by gitanshu
 use warnings;
 
 $x = 3; 
