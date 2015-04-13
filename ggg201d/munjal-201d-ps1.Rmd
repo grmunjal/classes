@@ -508,7 +508,11 @@ sfsdata[,2] <- c(40,5,4,1)
 sfsdata[,1] <- c(0,1/6,2/6,3/6)
 sfsdata
 
-plot(sfsdata)
+library(ggplot2)
+sfsdata <- data.frame(sfsdata)
+qplot(x=sfsdata$MinorAlleleFrequency,y=sfsdata$NumberofSites,geom="bar",
+      stat="identity",width=0.05,xlab="Minor Allele Frequency",ylab="Number of Sites",
+      main="Minor Allele Frequency Spectrum")              
 ```
 \pagebreak
 
@@ -520,7 +524,11 @@ sfsdata[,2] <- c(40,4,2,1,2,1)
 sfsdata[,1] <- c(0,1/6,2/6,3/6,4/6,5/6)
 sfsdata
 
-plot(sfsdata)
+library(ggplot2)
+sfsdata <- data.frame(sfsdata)
+qplot(x=sfsdata$DerivedAlleleFrequency,y=sfsdata$NumberofSites,geom="bar",
+      stat="identity",width=0.05,xlab="Derived Allele Frequency",ylab="Number of Sites",
+      main="Derived Allele Frequency Spectrum")   
 ```
 
 

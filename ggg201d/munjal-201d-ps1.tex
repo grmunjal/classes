@@ -1103,7 +1103,11 @@ data?}\label{what-is-the-minor-allele-frequency-spectrum-for-these-data}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{plot}\NormalTok{(sfsdata)}
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\NormalTok{sfsdata <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(sfsdata)}
+\KeywordTok{qplot}\NormalTok{(}\DataTypeTok{x=}\NormalTok{sfsdata$MinorAlleleFrequency,}\DataTypeTok{y=}\NormalTok{sfsdata$NumberofSites,}\DataTypeTok{geom=}\StringTok{"bar"}\NormalTok{,}
+      \DataTypeTok{stat=}\StringTok{"identity"}\NormalTok{,}\DataTypeTok{width=}\FloatTok{0.05}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{"Minor Allele Frequency"}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{"Number of Sites"}\NormalTok{,}
+      \DataTypeTok{main=}\StringTok{"Minor Allele Frequency Spectrum"}\NormalTok{)              }
 \end{Highlighting}
 \end{Shaded}
 
@@ -1135,7 +1139,11 @@ data?}\label{what-is-the-derived-allele-frequency-spectrum-for-these-data}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{plot}\NormalTok{(sfsdata)}
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\NormalTok{sfsdata <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(sfsdata)}
+\KeywordTok{qplot}\NormalTok{(}\DataTypeTok{x=}\NormalTok{sfsdata$DerivedAlleleFrequency,}\DataTypeTok{y=}\NormalTok{sfsdata$NumberofSites,}\DataTypeTok{geom=}\StringTok{"bar"}\NormalTok{,}
+      \DataTypeTok{stat=}\StringTok{"identity"}\NormalTok{,}\DataTypeTok{width=}\FloatTok{0.05}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{"Derived Allele Frequency"}\NormalTok{,}\DataTypeTok{ylab=}\StringTok{"Number of Sites"}\NormalTok{,}
+      \DataTypeTok{main=}\StringTok{"Derived Allele Frequency Spectrum"}\NormalTok{)   }
 \end{Highlighting}
 \end{Shaded}
 
