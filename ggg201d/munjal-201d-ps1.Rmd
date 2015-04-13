@@ -12,7 +12,7 @@ output:
 
 ##Calculate the allele frequenies for each locus.  
   
-We define an R function to calculate allele frequencies for a bi-allelic locus given genotype frequencies. When provided genotype frequencies in the order (homozygous1, heterozygous, homozygous2), the function returns frequency of allele1, frequency of allele2, and 1-frequency of allele1 (added to double check calc. allele 2 frequency). I recycle this function for later questions in the assignment.
+I define an R function to calculate allele frequencies for a bi-allelic locus given genotype frequencies. When provided genotype frequencies in the order (homozygous1, heterozygous, homozygous2), the function returns frequency of allele1, frequency of allele2, and 1-frequency of allele1 (added to double check calc. allele 2 frequency). I recycle this function for later questions in the assignment.
 ```{r}
 ################################################
 # Allele Frequencies
@@ -49,7 +49,7 @@ allelefrequency(ho1,het,ho2)
   
 ## What is the expected heterozygosity for each locus given the allele frequencies?
   
-We define a function to return the expected frequency of heterozygous genotypes as 2pq when allele frequencies are p and q.
+I define a function to return the expected frequency of heterozygous genotypes as 2pq when allele frequencies are p and q.
 ```{r}
 ################################################
 # Expected heterozygosity
@@ -105,8 +105,8 @@ hwedat
 
 #Chi-square and p-value
 chisq <- sum(hwedat[,3])
-chisq
-pchisq(chisq,df=1,lower.tail=FALSE)
+chisq                               #chi-squared value
+pchisq(chisq,df=1,lower.tail=FALSE) #p-value
 ```
 Indeed, **the population significantly deviates from HWE at Locus 1** at the 95\% confidence level.
   
@@ -141,8 +141,8 @@ hwedat[,3] <- ((obs - exp)^2)/exp
 hwedat
 
 chisq <- sum(hwedat[,3])
-chisq
-pchisq(chisq,df=1,lower.tail=FALSE)
+chisq                               #chi-squared value
+pchisq(chisq,df=1,lower.tail=FALSE) #p-value
 ```
 At the 95\% confidence level, **the population does not significantly deviate from HWE at Locus 2.**
 \begin{center}
@@ -162,7 +162,7 @@ At the 95\% confidence level, **the population does not significantly deviate fr
 # Problem 2
 ## How many of each haplotype were definitively observed in this population?
   
-All genotypes except the CTAG double heterozygote contribute towardss the observed haplotypes. Double homozygotes contribute 2N haplotypes and heterozygotes for one or the other locus contribute N haplotypes where N is the number of individuals with the haplotype under consideration.
+All genotypes except the CTAG double heterozygote contribute towardss the observed haplotypes. Double homozygotes contribute $2N$ haplotypes and heterozygotes for one or the other locus contribute N haplotypes where $N$ is the number of individuals with the haplotype under consideration.
 ```{r}
 ################################################
 # Definitively Observed Haplotypes
@@ -188,7 +188,7 @@ obsdata
   
     
 ##  Calculate D, D', and r2 for the C-A haplotype.
-We use the definitive set of observed haplotypes to calculate allele frequencies. 
+I use the definitive set of observed haplotypes to calculate allele frequencies. 
 ```{r}
 ################################################
 # D, D', and r2 for the C-A haplotype
@@ -201,7 +201,7 @@ t <- (TA + TG) / Total
 g <- (CG + TG) / Total
 c("c"=c,"a"=a,"t"=t,"g"=g)
 ```
-
+The allele frequencies are then used to calculate expected haplotype frequencies
 ```{r}
 #Expected Haplotype Frequencies
 expca <- c * a
@@ -225,21 +225,21 @@ obsca <- parta[1,2]
 D <- obsca - expca
 D
 ```
-Thus, **D=0.0744**
+Thus, **D = 0.0744**
   
 ```{r}
 #D prime for C-A haplotype
 Dprime <- D / min(expcg,expta)
 Dprime
 ```
-Thus, **D'==0.510**
+Thus, **D' = 0.510**
   
 ```{r}
 #R squared for C-A haplotype
 Rsquared <- (D^2) / (c*a*t*g)
 Rsquared
 ```
-Thus, **R^2 = 0.121**
+Thus, **R$^2$ = 0.121**
   
   
 ## Calculate Chi-square and determine if there is significant linkage disequilibrium (LD) at this locus.
@@ -262,9 +262,13 @@ chisq <- sum(chisqtab[,3])
 chisq                               #chi-squared value
 pchisq(chisq,df=1,lower.tail=FALSE) #p-value
 ```
-Indeed, there is significant LD at this locus at the 95\% confience level.
+Indeed, **there is significant LD at this locus** at the 95\% confience level.
+\begin{center}
+\line(1,0){250}
+\end{center}
   
-  
+\pagebreak
+
 # Problem 3
 ## Calculate the p-value of association between genotype and phenotype using a Chi-square test on expected and observed allele counts.
   
@@ -295,7 +299,9 @@ obsdata[,2] <- c(350,250)
 totalcasealleles <- sum(obsdata[,1])
 totalcontrolalleles <- sum(obsdata[,2])
 obsdata
-
+```
+\pagebreak
+```{r}
 #Matrix of expected allele counts
 expdata <- matrix(NA,2,2)
 rownames(expdata) <- c("C","A")
@@ -315,7 +321,10 @@ chisq <- sum(x)
 chisq                               #chi-squared value
 pchisq(chisq,df=1,lower.tail=FALSE) #p-value
 ```
-It would appear that the genotype is indeed significantly associated with the phenotype at the 95\% confidence level **(p-value:0.009459189)**
+It would appear that the genotype is indeed significantly associated with the phenotype at the 95\% confidence level **(p-value: 0.009459189)**
+\begin{center}
+\line(1,0){250}
+\end{center}
   
   
 ## If the researchers used a SNP chip with 100,000 SNPs. How many of these SNPs would you expect to be that significant by chance?
@@ -323,19 +332,21 @@ It would appear that the genotype is indeed significantly associated with the ph
 pchisq(chisq,df=1,lower.tail=FALSE)*100000
 ```
 I would expect 946 SNPs to be that significant just by chance.
+\begin{center}
+\line(1,0){250}
+\end{center}
   
-  
+    
 ## Do you think this locus plays an important role in gluten sensitivity?
 **No, given the p-value and the number of SNPs used I do not feel very confident** in the association of this locus with gluten sensitivity as even using the most naive adjustment (like Bonferroni) for the p-value, I would need to see a p-value much lower (to the order of p < 10^-6) to be fairly confident in the association.
   
 # Problem 4  
-## What is FST between SP01 and SP03 at locus 1?
 ```{r}
 ################################################
 # Characterizing subpopulation structure
 ################################################
 
-#Raw Data provided
+#Raw data provided
 rawdata <- matrix(NA,3,6)
 colnames(rawdata) <- c("SNP","RA","SP1","SP2","SP3","SP4")
 rownames(rawdata) <- c("L1","L2","L3")
@@ -358,8 +369,11 @@ colnames(exphs) <- c("SP1","SP2","SP3","SP4")
 rownames(exphs) <- c("L1","L2","L3")
 exphs <- 2 * (obsdata) * (1 - obsdata)
 exphs
-
-
+```
+\pagebreak  
+      
+## What is $F_{ST}$ between SP01 and SP03 at locus 1?
+```{r}
 hsbar <- rowMeans(subset(exphs, select = c(SP1, SP3)))[1]
 averagep <- rowMeans(subset(obsdata, select = c(SP1, SP3)))[1]
 ht <- 2 * averagep * (1-averagep)
@@ -367,8 +381,11 @@ loc1fst13 <- (ht -hsbar)/ht
 loc1fst13
 ```
 Thus, **$F_{ST}$ between SP01 and SP03 at locus 1 is 0.0196**
+\begin{center}
+\line(1,0){250}
+\end{center}
   
-  
+    
 ## What is $F_{ST}$ between SP02 and SP04 at locus 2?
 ```{r}
 hsbar <- rowMeans(subset(exphs, select = c(SP2, SP4)))[2]
@@ -378,9 +395,11 @@ loc2fst24 <- (ht -hsbar)/ht
 loc2fst24
 ```
 Thus, **$F_{ST}$ between SP02 and SP04 at locus 2 is 0.375**
-  
-  
-##  What is FST among all four subpopulations at locus 3
+\begin{center}
+\line(1,0){250}
+\end{center}
+    
+##  What is $F_{ST}$ among all four subpopulations at locus 3
 ```{r}
 hsbar <- rowMeans(exphs)[3]
 averagep <- rowMeans(obsdata)[3]
@@ -389,11 +408,14 @@ loc3fst <- (ht -hsbar)/ht
 loc3fst
 ```
 Thus, **$F_{ST}$ among all populations at locus 3 is 0.212**
+\begin{center}
+\line(1,0){250}
+\end{center}
   
   
 ## What is the likelihood that this individual originated from SP01? What about SP02, SP03 and SP04?
 The genotype AA GC CA translates to homozygosity for the reference allele at locus 1 and heterozygosity for the other two loci. If $p_{i}$ were the frequency of the ref. allele at $loc_{i}$ then the frequency of the observed genotype would be $(p_1^2)(2*p_2*(1-p_2))(2*p_3*(1-p_3))$
-  
+
 ```{r}
 probAA1 <- obsdata[1,]^2  
 probGC2 <- 2 * obsdata[2,] * (1-obsdata[2,])
@@ -402,8 +424,11 @@ probAAGCCA <- probAA1 * probGC2 * probCA3
 probAAGCCA
 ```
 The above matrix shows the population-wise likelihoods for the genotype.
-  
-  
+\begin{center}
+\line(1,0){250}
+\end{center}
+\pagebreak  
+
 ## What is the posterior probability that the individual originated from SP01? What about SP02, SP03 and SP04?
 ```{r}
 #Priors
@@ -428,40 +453,53 @@ colnames(posteriorprob) <- c("posteriorprob")
 posteriorprob
 ```
 The above matrix shows the population wise posterior probability for the given genotype.
+\begin{center}
+\line(1,0){250}
+\end{center}
   
   
 # Problem 5
-I wrote a python program to analyze the given sequence data. The program (also submitted) returns pairwise differences, s, pi, and the sequences reduced to segregating sites only. 
+I wrote a python program to analyze the given sequence data. The program (also submitted) returns pairwise differences, s, $\pi$(rounded), and the sequences reduced to segregating sites only(plus 1st base). 
   
 ## How many segregating sites (s) are present in these data?
-10
+**10**
+\begin{center}
+\line(1,0){250}
+\end{center}
 
-## What is pi (??) in these data?
+## What is pi ($\pi$) in these data?
 ```{r}
 Dij <- 66
 n <- 6
 pi <- Dij/((n*(n-1)) / 2)
 pi
 ```
-Thus, **$\pi=4.4$**
+Thus, **$\pi$=4.4**
+\begin{center}
+\line(1,0){250}
+\end{center}
   
-## What are s and ?? expressed in per site values?
+## What are s and $\pi$ expressed in per site values?
 ```{r}
 s <- 10
 pi <- 4.4
-nsite <- 50
+bp <- 50
 
-spersite <- s/(2*nsite)
+spersite <- s/(2*bp)
 spersite
 ```
-Thus, **s per site = **
+Thus, **s per site = 0.1.**
 ```{r}
-pipersite <- pi/(2*nsite)
+pipersite <- pi/(2*bp)
 pipersite
 ```
-Thus, **pi per site = **
+Thus, **$\pi$ per site = 0.044.**
+\begin{center}
+\line(1,0){250}
+\end{center}
   
-  
+\pagebreak    
+
 ## What is the minor allele frequency spectrum for these data?
 ```{r}
 sfsdata <- matrix(NA,4,2)
@@ -472,6 +510,7 @@ sfsdata
 
 plot(sfsdata)
 ```
+\pagebreak
 
 ## What is the derived allele frequency spectrum for these data?
 ```{r}
