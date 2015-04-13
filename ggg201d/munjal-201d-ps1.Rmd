@@ -485,15 +485,15 @@ s <- 10
 pi <- 4.4
 bp <- 50
 
-spersite <- s/(2*bp)
+spersite <- s/(bp)
 spersite
 ```
-Thus, **s per site = 0.1.**
+Thus, **s per site = 0.2.**
 ```{r}
-pipersite <- pi/(2*bp)
+pipersite <- pi/(bp)
 pipersite
 ```
-Thus, **$\pi$ per site = 0.044.**
+Thus, **$\pi$ per site = 0.088.**
 \begin{center}
 \line(1,0){250}
 \end{center}
