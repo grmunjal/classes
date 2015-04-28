@@ -1,0 +1,863 @@
+\documentclass[]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+% Set line spacing
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+    \usepackage{xltxtra,xunicode}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+\fi
+% use microtype if available
+\IfFileExists{microtype.sty}{\usepackage{microtype}}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{{#1}}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{{#1}}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{{#1}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{{#1}}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{{#1}}}
+\newcommand{\RegionMarkerTok}[1]{{#1}}
+\newcommand{\ErrorTok}[1]{\textbf{{#1}}}
+\newcommand{\NormalTok}[1]{{#1}}
+\usepackage{graphicx}
+\usepackage{float}
+% Redefine \includegraphics so that, unless explicit options are
+% given, the image width will not exceed the width of the page.
+% Images get their normal width if they fit onto the page, but
+% are scaled down if they would overflow the margins.
+
+\makeatletter
+\def\ScaleIfNeeded{%
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+\let\Oldincludegraphics\includegraphics
+{%
+ \catcode`\@=11\relax%
+ \gdef\includegraphics{\@ifnextchar[{\Oldincludegraphics}{\Oldincludegraphics[width=\ScaleIfNeeded]}}%
+}%
+\ifxetex
+  \usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \usepackage[unicode=true]{hyperref}
+\fi
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={Gitanshu Munjal},
+            pdftitle={Problem Set 2},
+            colorlinks=true,
+            citecolor=blue,
+            urlcolor=blue,
+            linkcolor=magenta,
+            pdfborder={0 0 0}}
+\urlstyle{same}  % don't use monospace font for urls
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\setcounter{secnumdepth}{0}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+\setlength{\droptitle}{-2em}
+  \title{Problem Set 2}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{Gitanshu Munjal}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \predate{\centering\large\emph}
+  \postdate{\par}
+  \date{Saturday, April 25, 2015}
+
+
+
+
+\begin{document}
+
+\maketitle
+
+
+\section{Problem 1}\label{problem-1}
+
+\subsection{Using the Pairwise FST data construct a neighbor joining
+tree including distances for the Igbo, Yoruba, Kongo, Bamoun, Fulani
+populations (branches don't have to be perfectly to scale). (15
+pts)}\label{using-the-pairwise-fst-data-construct-a-neighbor-joining-tree-including-distances-for-the-igbo-yoruba-kongo-bamoun-fulani-populations-branches-dont-have-to-be-perfectly-to-scale.-15-pts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{################################################}
+\CommentTok{# Neighbor Joining Tree}
+\NormalTok{################################################}
+
+\CommentTok{# Clear workspace, set working directory, read in Fst matrix (reduced from paper)}
+\KeywordTok{rm}\NormalTok{(}\DataTypeTok{list=}\KeywordTok{ls}\NormalTok{())}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Users}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{uglysweaters}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Desktop}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{GGG201D}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{ProblemSet2}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{"}\NormalTok{)}
+
+\NormalTok{fstmatrix <-}\StringTok{ }\KeywordTok{read.table}\NormalTok{(}\StringTok{"data}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{tab1.txt"}\NormalTok{,}\DataTypeTok{header=}\NormalTok{T,}\DataTypeTok{row.names=}\DecValTok{1}\NormalTok{,}\DataTypeTok{sep=}\StringTok{"}\CharTok{\textbackslash{}t}\StringTok{"}\NormalTok{)}
+\NormalTok{fstmatrix <-}\StringTok{ }\KeywordTok{as.matrix}\NormalTok{(fstmatrix)}
+\NormalTok{fstmatrix}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         Igbo Yoruba Kongo Bamoun Fulani
+## Igbo      NA  0.084 0.282  0.293  3.905
+## Yoruba 0.084     NA 0.291  0.318  4.034
+## Kongo  0.282  0.291    NA  0.175  3.770
+## Bamoun 0.293  0.318 0.175     NA  3.996
+## Fulani 3.905  4.034 3.770  3.996     NA
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Find pair with minimum distance (ignore diagnoal NAs)}
+\KeywordTok{which}\NormalTok{(fstmatrix ==}\StringTok{ }\KeywordTok{min}\NormalTok{(fstmatrix,}\DataTypeTok{na.rm=}\NormalTok{T),T)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        row col
+## Yoruba   2   1
+## Igbo     1   2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# record distance between Igbo and Yoruba}
+\NormalTok{y1 <-}\KeywordTok{c}\NormalTok{(}\StringTok{"I-Y"}\NormalTok{,}\KeywordTok{min}\NormalTok{(fstmatrix,}\DataTypeTok{na.rm=}\NormalTok{T))}
+\end{Highlighting}
+\end{Shaded}
+
+\pagebreak
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{##########}
+\CommentTok{# Step 2}
+\NormalTok{##########}
+
+\CommentTok{# Make new matrix with one less row and one less column, set up col and row names}
+\NormalTok{fstmatrix2 <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\OtherTok{NA}\NormalTok{,}\KeywordTok{nrow}\NormalTok{(fstmatrix)-}\DecValTok{1}\NormalTok{,}\KeywordTok{ncol}\NormalTok{(fstmatrix)-}\DecValTok{1}\NormalTok{)}
+\KeywordTok{rownames}\NormalTok{(fstmatrix2) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"I-Y"}\NormalTok{,}\StringTok{"K"}\NormalTok{,}\StringTok{"B"}\NormalTok{,}\StringTok{"F"}\NormalTok{)}
+\KeywordTok{colnames}\NormalTok{(fstmatrix2) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"I-Y"}\NormalTok{,}\StringTok{"K"}\NormalTok{,}\StringTok{"B"}\NormalTok{,}\StringTok{"F"}\NormalTok{)}
+
+\CommentTok{# Calculate rlevant pairwise distances using first matrix as described in class notes}
+\NormalTok{fstmatrix2[}\DecValTok{2}\NormalTok{:}\DecValTok{4}\NormalTok{,}\DecValTok{1}\NormalTok{] <-}\StringTok{ }\NormalTok{(fstmatrix[}\DecValTok{3}\NormalTok{:}\DecValTok{5}\NormalTok{,}\StringTok{"Igbo"}\NormalTok{]+fstmatrix[}\DecValTok{3}\NormalTok{:}\DecValTok{5}\NormalTok{,}\StringTok{"Yoruba"}\NormalTok{])/}\DecValTok{2}
+\NormalTok{fstmatrix2[}\DecValTok{2}\NormalTok{:}\DecValTok{4}\NormalTok{,}\DecValTok{2}\NormalTok{] <-}\StringTok{ }\NormalTok{fstmatrix[}\DecValTok{3}\NormalTok{:}\DecValTok{5}\NormalTok{,}\DecValTok{3}\NormalTok{] }\CommentTok{#Distance same as first matrix}
+\NormalTok{fstmatrix2[}\DecValTok{2}\NormalTok{:}\DecValTok{4}\NormalTok{,}\DecValTok{3}\NormalTok{] <-}\StringTok{ }\NormalTok{fstmatrix[}\DecValTok{3}\NormalTok{:}\DecValTok{5}\NormalTok{,}\DecValTok{4}\NormalTok{] }\CommentTok{#Distance same as first matrix}
+\NormalTok{fstmatrix2[}\DecValTok{2}\NormalTok{:}\DecValTok{4}\NormalTok{,}\DecValTok{4}\NormalTok{] <-}\StringTok{ }\NormalTok{fstmatrix[}\DecValTok{3}\NormalTok{:}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{] }\CommentTok{#Distance same as first matrix}
+\NormalTok{fstmatrix2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        I-Y     K     B     F
+## I-Y     NA    NA    NA    NA
+## K   0.2865    NA 0.175 3.770
+## B   0.3055 0.175    NA 3.996
+## F   3.9695 3.770 3.996    NA
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Find pair with minimum distance (ignore diagnoal NAs)}
+\KeywordTok{which}\NormalTok{(fstmatrix2 ==}\StringTok{ }\KeywordTok{min}\NormalTok{(fstmatrix2,}\DataTypeTok{na.rm=}\NormalTok{T),T)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   row col
+## B   3   2
+## K   2   3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# record distance between Bamoun and Kongo}
+\NormalTok{y2 <-}\KeywordTok{c}\NormalTok{(}\StringTok{"B-K"}\NormalTok{,}\KeywordTok{min}\NormalTok{(fstmatrix2,}\DataTypeTok{na.rm=}\NormalTok{T))}
+
+\NormalTok{##########}
+\CommentTok{# Step 3}
+\NormalTok{##########}
+
+\CommentTok{# Make new matrix with one less row and one less column, set up col and row names}
+\NormalTok{fstmatrix3 <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\OtherTok{NA}\NormalTok{,}\KeywordTok{nrow}\NormalTok{(fstmatrix2)-}\DecValTok{1}\NormalTok{,}\KeywordTok{ncol}\NormalTok{(fstmatrix2)-}\DecValTok{1}\NormalTok{)}
+\KeywordTok{rownames}\NormalTok{(fstmatrix3) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"I-Y"}\NormalTok{,}\StringTok{"B-K"}\NormalTok{,}\StringTok{"Fulani"}\NormalTok{)}
+\KeywordTok{colnames}\NormalTok{(fstmatrix3) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"I-Y"}\NormalTok{,}\StringTok{"B-K"}\NormalTok{,}\StringTok{"Fulani"}\NormalTok{)}
+
+\CommentTok{# Calculate rlevant pairwise distances using first matrix as described in class notes}
+\NormalTok{fstmatrix3[}\StringTok{"I-Y"}\NormalTok{,}\DecValTok{2}\NormalTok{] <-}\StringTok{ }\NormalTok{(fstmatrix[}\StringTok{"Kongo"}\NormalTok{,}\StringTok{"Igbo"}\NormalTok{] +}\StringTok{ }\NormalTok{fstmatrix[}\StringTok{"Kongo"}\NormalTok{,}\StringTok{"Yoruba"}\NormalTok{] +}\StringTok{ }
+\StringTok{                          }\NormalTok{fstmatrix[}\StringTok{"Bamoun"}\NormalTok{,}\StringTok{"Igbo"}\NormalTok{] +fstmatrix[}\StringTok{"Bamoun"}\NormalTok{,}\StringTok{"Yoruba"}\NormalTok{])/}\DecValTok{4}
+\NormalTok{fstmatrix3[}\StringTok{"B-K"}\NormalTok{,}\DecValTok{1}\NormalTok{] <-}\StringTok{ }\NormalTok{(fstmatrix[}\StringTok{"Kongo"}\NormalTok{,}\StringTok{"Igbo"}\NormalTok{] +}\StringTok{ }\NormalTok{fstmatrix[}\StringTok{"Kongo"}\NormalTok{,}\StringTok{"Yoruba"}\NormalTok{] +}\StringTok{ }
+\StringTok{                          }\NormalTok{fstmatrix[}\StringTok{"Bamoun"}\NormalTok{,}\StringTok{"Igbo"}\NormalTok{] +fstmatrix[}\StringTok{"Bamoun"}\NormalTok{,}\StringTok{"Yoruba"}\NormalTok{])/}\DecValTok{4}
+\NormalTok{fstmatrix3[}\StringTok{"Fulani"}\NormalTok{,}\DecValTok{1}\NormalTok{] <-}\StringTok{ }\NormalTok{(fstmatrix[}\StringTok{"Fulani"}\NormalTok{,}\StringTok{"Igbo"}\NormalTok{] +}\StringTok{ }\NormalTok{fstmatrix[}\StringTok{"Fulani"}\NormalTok{,}\StringTok{"Yoruba"}\NormalTok{])/}\DecValTok{2}
+\NormalTok{fstmatrix3[}\StringTok{"Fulani"}\NormalTok{,}\DecValTok{2}\NormalTok{] <-}\StringTok{ }\NormalTok{(fstmatrix[}\StringTok{"Fulani"}\NormalTok{,}\StringTok{"Bamoun"}\NormalTok{]+}\StringTok{ }\NormalTok{fstmatrix[}\StringTok{"Fulani"}\NormalTok{,}\StringTok{"Kongo"}\NormalTok{])/}\DecValTok{2}
+\end{Highlighting}
+\end{Shaded}
+
+\pagebreak
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fstmatrix3}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##           I-Y   B-K Fulani
+## I-Y        NA 0.296     NA
+## B-K    0.2960    NA     NA
+## Fulani 3.9695 3.883     NA
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Find pair with minimum distance (ignore diagnoal NAs)}
+\KeywordTok{which}\NormalTok{(fstmatrix3 ==}\StringTok{ }\KeywordTok{min}\NormalTok{(fstmatrix3,}\DataTypeTok{na.rm=}\NormalTok{T),T)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     row col
+## B-K   2   1
+## I-Y   1   2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# record distance between Igbo-Yoruba and Bamoun-Kongo}
+\NormalTok{y3 <-}\KeywordTok{c}\NormalTok{(}\StringTok{"I-Y-B-K"}\NormalTok{,}\KeywordTok{min}\NormalTok{(fstmatrix3,}\DataTypeTok{na.rm=}\NormalTok{T))}
+
+\NormalTok{##########}
+\CommentTok{# Step 4}
+\NormalTok{##########}
+
+\CommentTok{# Make new matrix with one less row and one less column, set up col and row names}
+\NormalTok{fstmatrix4 <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\OtherTok{NA}\NormalTok{,}\KeywordTok{nrow}\NormalTok{(fstmatrix3)-}\DecValTok{1}\NormalTok{,}\KeywordTok{ncol}\NormalTok{(fstmatrix3)-}\DecValTok{1}\NormalTok{)}
+\KeywordTok{rownames}\NormalTok{(fstmatrix4) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"I-Y-B-K"}\NormalTok{,}\StringTok{"Fulani"}\NormalTok{)}
+\KeywordTok{colnames}\NormalTok{(fstmatrix4) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"I-Y-B-K"}\NormalTok{,}\StringTok{"Fulani"}\NormalTok{)}
+
+\CommentTok{# Calculate rlevant pairwise distances using first matrix as described in class notes}
+\NormalTok{fstmatrix4[}\StringTok{"Fulani"}\NormalTok{,}\DecValTok{1}\NormalTok{] <-}\StringTok{ }\NormalTok{(fstmatrix[}\StringTok{"Fulani"}\NormalTok{,}\StringTok{"Igbo"}\NormalTok{] +}\StringTok{ }\NormalTok{fstmatrix[}\StringTok{"Fulani"}\NormalTok{,}\StringTok{"Yoruba"}\NormalTok{] }
+                           \NormalTok{+}\StringTok{ }\NormalTok{fstmatrix[}\StringTok{"Fulani"}\NormalTok{,}\StringTok{"Bamoun"}\NormalTok{] +}\StringTok{ }\NormalTok{fstmatrix[}\StringTok{"Fulani"}\NormalTok{,}\StringTok{"Kongo"}\NormalTok{])/}\DecValTok{4}
+\NormalTok{fstmatrix4[}\StringTok{"I-Y-B-K"}\NormalTok{,}\DecValTok{2}\NormalTok{] <-}\StringTok{ }\NormalTok{(fstmatrix[}\StringTok{"Fulani"}\NormalTok{,}\StringTok{"Igbo"}\NormalTok{] +}\StringTok{ }\NormalTok{fstmatrix[}\StringTok{"Fulani"}\NormalTok{,}\StringTok{"Yoruba"}\NormalTok{] }
+                           \NormalTok{+}\StringTok{ }\NormalTok{fstmatrix[}\StringTok{"Fulani"}\NormalTok{,}\StringTok{"Bamoun"}\NormalTok{] +}\StringTok{ }\NormalTok{fstmatrix[}\StringTok{"Fulani"}\NormalTok{,}\StringTok{"Kongo"}\NormalTok{])/}\DecValTok{4}
+\NormalTok{fstmatrix4}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         I-Y-B-K  Fulani
+## I-Y-B-K      NA 3.92625
+## Fulani  3.92625      NA
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Find pair with minimum distance (ignore diagnoal NAs)}
+\KeywordTok{which}\NormalTok{(fstmatrix4 ==}\StringTok{ }\KeywordTok{min}\NormalTok{(fstmatrix4,}\DataTypeTok{na.rm=}\NormalTok{T),T)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         row col
+## Fulani    2   1
+## I-Y-B-K   1   2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# record distance between Igbo-Yoruba-Bamoun-Kongo and Fulani}
+\NormalTok{y4 <-}\KeywordTok{c}\NormalTok{(}\StringTok{"I-Y-B-K-F"}\NormalTok{,}\KeywordTok{min}\NormalTok{(fstmatrix4,}\DataTypeTok{na.rm=}\NormalTok{T))}
+
+\NormalTok{y <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(y1,y2,y3,y4)}
+\KeywordTok{colnames}\NormalTok{(y) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"NeighborsJoined"}\NormalTok{,}\StringTok{"TiptoMRCADistance"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pagebreak
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{data.frame}\NormalTok{(y)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    NeighborsJoined TiptoMRCADistance
+## y1             I-Y             0.084
+## y2             B-K             0.175
+## y3         I-Y-B-K             0.296
+## y4       I-Y-B-K-F           3.92625
+\end{verbatim}
+
+The tree based on the above presented data looks as follows:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{njtree.jpg}
+\caption{\label{fig:njtree}Neighbor Joining Tree based on data from Bryc et. al (2009).}
+\end{figure}
+
+\subsection{Describe how you could use bootstrapping to assess the
+relationships presented in your tree. (5
+pts)}\label{describe-how-you-could-use-bootstrapping-to-assess-the-relationships-presented-in-your-tree.-5-pts}
+
+We could pull the genotype data used for the study and resample n (where
+n = number of individuals used in the study from a given sub-population)
+individuals from each of the subpopulations with replacement multiple
+(say 1000) time. These data could then be used to generate trees as
+discussed in part a. We could then compare our tree from part a to these
+bootstrapped trees and assess the relationships in our tree by counting
+how many times a given relationship from our tree in part a occurs
+equivalently in the bootstrapped set of trees. Considering extreme
+findings for the sake of simplicity, if a relation is found to be the
+same 999 times one could be pretty confident in it compared to one that
+is found to be the same say only 30 out of 1000 times.
+
+\begin{center}
+\line(1,0){250}
+\end{center}
+
+\pagebreak
+
+\section{Problem 2}\label{problem-2}
+
+
+\subsection{Do these results indicate that the individual is exactly 1/3
+Scandinavian? In your answer, describe how maximum likelihood is used to
+estimate admixture across multiple loci. (8
+pts)}\label{do-these-results-indicate-that-the-individual-is-exactly-13-scandinavian-in-your-answer-describe-how-maximum-likelihood-is-used-to-estimate-admixture-across-multiple-loci.-8-pts}
+
+The admixture model underlying the presented figure uses a maximum
+likelihood framework to make inferences. Before we interpret the
+presented data, lets take a look at the underlying analyses.
+
+In a simple case, consider an individual originating from a single
+population. Genetic assignment may then be realized by genotyping that
+individual and determining the likelihood of the genotype under
+different populations based on allele frequencies at the genotyped loci
+in each of the populations under consideration. The population that
+presents the maximum-likelihood following such a calculation can naively
+be considered the population of origin. Under our simple case of origin
+from one population, we expect this signal to be rather strong (as shown
+in figure 1 for example).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{fig1.jpg}
+\caption{\label{fig:njtree}Likelihood Versus Subpopulation. Looks like the genotype/individual very likely came from subpopulation 4.}
+\end{figure}
+
+Now consider an individual with hybrid origins. The maximum-likelihood
+signal, as discussed above, from such an individual might not be as
+defining as presented in figure 1 because of the underlying hybrid
+origins (figure 2 for example). Under such a scenario, one expands the
+maximum-likelihood framework to account for admixture.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{fig2.jpg}
+\caption{\label{fig:njtree}Likelihood Versus Subpopulation. Single underlying subpopulation of origin unlikely, possibly admixed genotype/individual}
+\end{figure}
+
+For simplicity, say we have a good suspicion (because sadly for this
+hypotheical species, there are only two populations! other reasons could
+be based in biology, geography, etc.) that the individual is a hybrid
+between two populations. Under such a scenario, we expect a fraction of
+this individual's genome ($\theta$) to originate from population 1 and
+the remainder ($1-\theta$) from population 2. Based on this and a
+knowledge of allele frequencies at genotyped loci in the original two
+populations, we can develop probabilistic expectations for each
+genotyped loci as shown follows (for a single locus and two populations
+s1 and s2).:
+
+\[P(GenotyeObserved\ |\ \theta)\ =\ P[both\ alleles\ from\ s1]\ +\ P[allele1\ from\ s1\ \&\ allele2\ from\ s2]\ +\]
+\[\quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad P[allele1\ from\ s2\ \&\ allele2\ from\ s1]\ +\ [both\ alleles\ from\ s1]\]
+\linebreak
+\[\quad \quad \quad =\ (\theta*f_{s1})\ \ \ (\theta*f_{s1})\ +\ (\theta*f_{s1})\ \ \ ((1-\theta)*f_{s2}))\ +\]
+\[\quad \quad \quad \quad \quad \quad \quad \quad \quad \quad ((1-\theta)*f_{s2}) \ \ (\theta*f_{s1})\ +\ ((1-\theta)*f_{s2})\ \ \ ((1-\theta)*f_{s2})\]
+where,\newline
+$\theta$ is the fraction of the genome originating from subpopulation 1
+and $f_{s1}$ the frequency of the observed allele in subpopulation 1.
+
+For a multi-locus genotype, the probability of the total genotype
+observed can then be calculated simply by multiplying the probabilities
+at each locus and can be represented by the following equation:
+\[\prod_{i=1}^{n}P(G_{i}\ |\ \theta)\] where,\newline
+$G$ is the genotype at the $i^{th}$ locus.
+
+Next, we vary the value of our parameter of interest ($\theta$;
+range:0-1) to maximize the above likelihood. The value of $\theta$ that
+results in the maximum likelihood is then our best candidate for the
+fraction of the genome originating from population
+1.\textbf{These values are what is reported in the data shown}. Given
+the large number of loci used for determining the presented data, we can
+be sure that \textbf{it is very likely that this individual has 1/3
+Scandinavian ancestry.}
+
+\subsection{What is one method you could use to assess confidence in
+these admixture estimates? (6
+pts)}\label{what-is-one-method-you-could-use-to-assess-confidence-in-these-admixture-estimates-6-pts}
+
+For thin slices of $\theta$ (say 0 to 1 in steps of 0.001 for example),
+I would determine the total genotype probability as described above,
+determine the variance of the determined probability distribution, and
+build a confidence interval around it. I would also be interested in
+visualizing and maybe reinforcing the findings by doing a PCA with the
+SNP set of the individual.
+\pagebreak
+
+\subsection{Why is accounting for genetic ancestry useful for studying
+the genetic basis of complex traits (such as GWAS)? (6
+pts)}\label{why-is-accounting-for-genetic-ancestry-useful-for-studying-the-genetic-basis-of-complex-traits-such-as-gwas-6-pts}
+
+Accounting for genetic ancestry is useful in dissecting the genetic
+basis of complex traits as association studies based on diversity panels
+with uncharacterized population structure are extremely vulnerable to
+spurious associations leading to an inflation of false positives.
+
+Diversity panels composed of mixed and/or admixed individuals with
+unknown proportions of multiple genetic origins could give rise to
+linkage disequilibrium between unlinked loci resulting in an inflation
+of false positive associtations that are not actually involved in
+phenotypic variation for the trait being investigated \cite{mezmouk}.
+
+In case-control type disease association studies, spurious associations
+are likely if the frequency of disease varies across populations under
+consideration \cite{pritchard}. Consider an extreme scenario where 75\%
+of the diseased individuals cases come from one population and two
+populations are under consideration for the disease association study.
+Under such a situation, one would expect to find lots of false positive
+alleles that associate with the phenotype purely because of their
+enriched frequency in one population. 
+
+\bibliographystyle{acm}
+\bibliography{bibi}
+
+\begin{center}
+\line(1,0){250}
+\end{center}
+
+\pagebreak
+
+\section{Problem 3}\label{problem-3}
+
+\subsection{How is genetic drift is affected by inital allele frequency
+and population
+size?}\label{how-is-genetic-drift-is-affected-by-inital-allele-frequency-and-population-size}
+
+\subsection{Defining a function}\label{defining-a-function}
+
+Based on the premise that expected change in allele frequency
+($\Delta_{expected}^f$) for a given locus in a population of size n is
+equal to the summation from 0 to n of the product of the binomial
+probability of a given change and the absolute value of the magnitude of
+change in frequency over a generation, I define an R function that takes
+initial frequency and population size as input parameters to return the
+expected change in allele frequency as follows:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{efreqchange <-}\StringTok{ }\NormalTok{function(freqgen0,popsize)\{}
+  
+  \CommentTok{#empty matrix with 6 columns}
+  \NormalTok{plotmatrix <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(,,}\DecValTok{6}\NormalTok{)                                 }
+  \KeywordTok{colnames}\NormalTok{(plotmatrix) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"nchosen"}\NormalTok{,}\StringTok{"freqgen0"}\NormalTok{,}\StringTok{"dbinom"}\NormalTok{,}\StringTok{"freqgen1"}\NormalTok{,}
+                            \StringTok{"deltaf"}\NormalTok{,}\StringTok{"weighted"}\NormalTok{)}
+  
+  \CommentTok{#column 1 = chosen n, }
+  \CommentTok{#column 2 = initial frequency}
+  \CommentTok{#column 3 = binomial probabilty of popsize choose n}
+  \CommentTok{#column 4 = frequency in next generation = n/popsize}
+  \NormalTok{for(nchosen in }\DecValTok{0}\NormalTok{:popsize)\{}
+      
+    \NormalTok{roww <-}\StringTok{ }\KeywordTok{c}\NormalTok{(nchosen, freqgen0, }\KeywordTok{dbinom}\NormalTok{(nchosen,}\DataTypeTok{size=}\NormalTok{popsize,freqgen0),}
+              \NormalTok{nchosen/popsize,}\OtherTok{NA}\NormalTok{,}\OtherTok{NA}\NormalTok{)}
+    \NormalTok{plotmatrix <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(plotmatrix,roww)}
+  \NormalTok{\}}
+  
+  \CommentTok{#column 5 = delta frequency = nextgenfrequency - initialfrequency}
+  \CommentTok{#remove rows with NA by ordering and removing end of matrix}
+  \NormalTok{plotmatrix <-}\StringTok{ }\NormalTok{plotmatrix[}\KeywordTok{order}\NormalTok{(plotmatrix[,}\DecValTok{2}\NormalTok{]),]}
+  \NormalTok{plotmatrix[,}\DecValTok{5}\NormalTok{] <-}\StringTok{ }\NormalTok{plotmatrix[,}\DecValTok{4}\NormalTok{] -plotmatrix[,}\DecValTok{2}\NormalTok{]}
+  \NormalTok{plotmatrix <-}\StringTok{ }\NormalTok{plotmatrix[}\DecValTok{1}\NormalTok{:}\KeywordTok{nrow}\NormalTok{(plotmatrix)-}\DecValTok{1}\NormalTok{,]}
+  
+  
+  \CommentTok{#change delta to absolute delta}
+  \NormalTok{for(i in }\DecValTok{1}\NormalTok{:}\KeywordTok{nrow}\NormalTok{(plotmatrix))\{}
+    \NormalTok{if(plotmatrix[i,}\DecValTok{5}\NormalTok{]<}\DecValTok{0}\NormalTok{)\{}
+      \NormalTok{plotmatrix[i,}\DecValTok{5}\NormalTok{] <-}\StringTok{ }\NormalTok{-(plotmatrix[i,}\DecValTok{5}\NormalTok{])}
+    \NormalTok{\}}
+    \NormalTok{else\{plotmatrix[i,}\DecValTok{5}\NormalTok{] <-}\StringTok{ }\NormalTok{(plotmatrix[i,}\DecValTok{5}\NormalTok{])\}}
+  \NormalTok{\}}
+  
+  \CommentTok{#column 6 = deltaf * binomprobability}
+  \NormalTok{plotmatrix[,}\DecValTok{6}\NormalTok{] <-}\StringTok{ }\NormalTok{plotmatrix[,}\DecValTok{5}\NormalTok{]*plotmatrix[,}\DecValTok{3}\NormalTok{]}
+  
+  \CommentTok{#expected change in allele frequency based on premise}
+  \NormalTok{e <-}\StringTok{ }\KeywordTok{sum}\NormalTok{(plotmatrix[,}\DecValTok{6}\NormalTok{])}
+  \KeywordTok{return}\NormalTok{(e)}
+  
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Using R or Excel, create a plot that shows how expected
+change in allele frequency for allele A changes depending on the
+frequency of A in generation 1 in populations of size of 2N=10 and
+2N=100. (10
+pts)}\label{using-r-or-excel-create-a-plot-that-shows-how-expected-change-in-allele-frequency-for-allele-a-changes-depending-on-the-frequency-of-a-in-generation-1-in-populations-of-size-of-2n10-and-2n100.-10-pts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{popsize <-}\StringTok{ }\DecValTok{10}
+\NormalTok{freqchange <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\OtherTok{NA}\NormalTok{,}\DecValTok{11}\NormalTok{,}\DecValTok{2}\NormalTok{)}
+\KeywordTok{colnames}\NormalTok{(freqchange) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"InitialFrequency"} \NormalTok{, }\StringTok{"ExpectedChange"}\NormalTok{)}
+
+\NormalTok{for(freqgen0 in }\KeywordTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\FloatTok{0.1}\NormalTok{))\{}
+  
+  \NormalTok{y <-}\StringTok{ }\KeywordTok{efreqchange}\NormalTok{(freqgen0,popsize)}
+  
+  \NormalTok{freqchange[(}\DecValTok{10}\NormalTok{*freqgen0)+}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{] <-}\StringTok{ }\NormalTok{freqgen0}
+  \NormalTok{freqchange[(}\DecValTok{10}\NormalTok{*freqgen0)+}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{] <-}\StringTok{ }\NormalTok{y}
+\NormalTok{\}}
+
+\NormalTok{(freqchange <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(freqchange))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    InitialFrequency ExpectedChange
+## 1               0.0     0.00000000
+## 2               0.1     0.06973569
+## 3               0.2     0.09663676
+## 4               0.3     0.11206773
+## 5               0.4     0.12039487
+## 6               0.5     0.12304688
+## 7               0.6     0.12039487
+## 8               0.7     0.11206773
+## 9               0.8     0.09663676
+## 10              0.9     0.06973569
+## 11              1.0     0.00000000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data=}\NormalTok{freqchange,}\KeywordTok{aes}\NormalTok{(freqchange[,}\DecValTok{1}\NormalTok{],freqchange[,}\DecValTok{2}\NormalTok{])) +}\StringTok{ }
+\StringTok{        }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{size=}\DecValTok{1}\NormalTok{) +}\StringTok{ }
+\StringTok{        }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{y=}\StringTok{"Expected Change in Frequency"}\NormalTok{,}\DataTypeTok{x=}\StringTok{"Initial Frequency"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{munjal-201d-ps2_files/figure-latex/unnamed-chunk-6-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{popsize <-}\StringTok{ }\DecValTok{100}
+\NormalTok{freqchange <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\OtherTok{NA}\NormalTok{,}\DecValTok{11}\NormalTok{,}\DecValTok{2}\NormalTok{)}
+\KeywordTok{colnames}\NormalTok{(freqchange) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"InitialFrequency"} \NormalTok{, }\StringTok{"ExpectedChange"}\NormalTok{)}
+
+\NormalTok{for(freqgen0 in }\KeywordTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\FloatTok{0.1}\NormalTok{))\{}
+  
+  \NormalTok{y <-}\StringTok{ }\KeywordTok{efreqchange}\NormalTok{(freqgen0,popsize)}
+  
+  \NormalTok{freqchange[(}\DecValTok{10}\NormalTok{*freqgen0)+}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{] <-}\StringTok{ }\NormalTok{freqgen0}
+  \NormalTok{freqchange[(}\DecValTok{10}\NormalTok{*freqgen0)+}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{] <-}\StringTok{ }\NormalTok{y}
+\NormalTok{\}}
+
+
+\NormalTok{(freqchange <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(freqchange))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    InitialFrequency ExpectedChange
+## 1               0.0     0.00000000
+## 2               0.1     0.02373576
+## 3               0.2     0.03177607
+## 4               0.3     0.03644922
+## 5               0.4     0.03898519
+## 6               0.5     0.03979462
+## 7               0.6     0.03898519
+## 8               0.7     0.03644922
+## 9               0.8     0.03177607
+## 10              0.9     0.02373576
+## 11              1.0     0.00000000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data=}\NormalTok{freqchange,}\KeywordTok{aes}\NormalTok{(freqchange[,}\DecValTok{1}\NormalTok{],freqchange[,}\DecValTok{2}\NormalTok{])) +}\StringTok{ }
+\StringTok{        }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{size=}\DecValTok{1}\NormalTok{) +}\StringTok{ }
+\StringTok{        }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{y=}\StringTok{"Expected Change in Frequency"}\NormalTok{,}\DataTypeTok{x=}\StringTok{"Initial Frequency"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{munjal-201d-ps2_files/figure-latex/unnamed-chunk-6-2.pdf}
+
+\subsection{Using R or Excel, create a plot that shows how expected
+change in allele frequency for allele A changes depending on population
+size, starting with an allele frequency of f(A)=0.5 (10
+pts)}\label{using-r-or-excel-create-a-plot-that-shows-how-expected-change-in-allele-frequency-for-allele-a-changes-depending-on-population-size-starting-with-an-allele-frequency-of-fa0.5-10-pts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{freqgen0 <-}\FloatTok{0.5}
+\NormalTok{freqchange <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\OtherTok{NA}\NormalTok{,}\DecValTok{11}\NormalTok{,}\DecValTok{2}\NormalTok{)}
+\KeywordTok{colnames}\NormalTok{(freqchange) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"PopSize"} \NormalTok{, }\StringTok{"ExpectedChange"}\NormalTok{)}
+\NormalTok{for(popsize in }\KeywordTok{seq}\NormalTok{(}\DecValTok{10}\NormalTok{,}\DecValTok{100}\NormalTok{,}\DecValTok{10}\NormalTok{))\{}
+  
+  \NormalTok{y <-}\StringTok{ }\KeywordTok{efreqchange}\NormalTok{(freqgen0,popsize)}
+  \NormalTok{freqchange[popsize/}\DecValTok{10}\NormalTok{,}\DecValTok{1}\NormalTok{] <-}\StringTok{ }\NormalTok{popsize}
+  \NormalTok{freqchange[popsize/}\DecValTok{10}\NormalTok{,}\DecValTok{2}\NormalTok{] <-}\StringTok{ }\NormalTok{y}
+\NormalTok{\}}
+
+\NormalTok{(freqchange <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\KeywordTok{na.omit}\NormalTok{(freqchange)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    PopSize ExpectedChange
+## 1       10     0.12304688
+## 2       20     0.08809853
+## 3       30     0.07223222
+## 4       40     0.06268534
+## 5       50     0.05613759
+## 6       60     0.05128909
+## 7       70     0.04751274
+## 8       80     0.04446394
+## 9       90     0.04193556
+## 10     100     0.03979462
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data=}\NormalTok{freqchange,}\KeywordTok{aes}\NormalTok{(freqchange[,}\DecValTok{1}\NormalTok{],freqchange[,}\DecValTok{2}\NormalTok{])) +}\StringTok{ }
+\StringTok{        }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{size=}\DecValTok{1}\NormalTok{) +}\StringTok{ }
+\StringTok{        }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{y=}\StringTok{"Expected Change in Frequency"}\NormalTok{,}\DataTypeTok{x=}\StringTok{"Population Size"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{munjal-201d-ps2_files/figure-latex/unnamed-chunk-7-1.pdf}
+
+\begin{center}
+\line(1,0){250}
+\end{center}
+
+\section{Problem 4}\label{problem-4}
+
+\subsection{Sketch a neighbor joining tree based on the number of
+nucleotide differences for these three species. (5
+pts)}\label{sketch-a-neighbor-joining-tree-based-on-the-number-of-nucleotide-differences-for-these-three-species.-5-pts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{###########}
+\CommentTok{# Step 1}
+\NormalTok{###########}
+
+\CommentTok{#matrix with per site differences data}
+\NormalTok{divmatrix <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\OtherTok{NA}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{3}\NormalTok{)}
+\KeywordTok{colnames}\NormalTok{(divmatrix) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"A"}\NormalTok{,}\StringTok{"B"}\NormalTok{,}\StringTok{"C"}\NormalTok{)}
+\KeywordTok{rownames}\NormalTok{(divmatrix) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"A"}\NormalTok{,}\StringTok{"B"}\NormalTok{,}\StringTok{"C"}\NormalTok{)}
+\NormalTok{divmatrix[,}\DecValTok{1}\NormalTok{] <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\OtherTok{NA}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{14}\NormalTok{)/}\DecValTok{1000}
+\NormalTok{divmatrix[,}\DecValTok{2}\NormalTok{] <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{6}\NormalTok{,}\OtherTok{NA}\NormalTok{,}\DecValTok{17}\NormalTok{)/}\DecValTok{1000}
+\NormalTok{divmatrix[,}\DecValTok{3}\NormalTok{] <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{14}\NormalTok{,}\DecValTok{17}\NormalTok{,}\OtherTok{NA}\NormalTok{)/}\DecValTok{1000}
+\NormalTok{divmatrix}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       A     B     C
+## A    NA 0.006 0.014
+## B 0.006    NA 0.017
+## C 0.014 0.017    NA
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#find pair with minimum per site differences}
+\KeywordTok{which}\NormalTok{(divmatrix ==}\StringTok{ }\KeywordTok{min}\NormalTok{(divmatrix,}\DataTypeTok{na.rm=}\NormalTok{T),T)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   row col
+## B   2   1
+## A   1   2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#record number of per site differences}
+\NormalTok{y1 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"A-B"}\NormalTok{,}\KeywordTok{min}\NormalTok{(divmatrix,}\DataTypeTok{na.rm=}\NormalTok{T))}
+
+\NormalTok{###########}
+\CommentTok{# Step 2}
+\NormalTok{###########}
+
+\CommentTok{#matrix reduced from step 1}
+\NormalTok{divmatrix2 <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\OtherTok{NA}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{)}
+\KeywordTok{colnames}\NormalTok{(divmatrix2) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"A-B"}\NormalTok{,}\StringTok{"C"}\NormalTok{)}
+\KeywordTok{rownames}\NormalTok{(divmatrix2) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"A-B"}\NormalTok{,}\StringTok{"C"}\NormalTok{)}
+\NormalTok{divmatrix2[,}\DecValTok{1}\NormalTok{] <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\OtherTok{NA}\NormalTok{,}\KeywordTok{sum}\NormalTok{(divmatrix[}\DecValTok{3}\NormalTok{,}\DecValTok{1}\NormalTok{:}\DecValTok{2}\NormalTok{])/}\DecValTok{2}\NormalTok{)}
+\NormalTok{divmatrix2[,}\DecValTok{2}\NormalTok{] <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\KeywordTok{sum}\NormalTok{(divmatrix[}\DecValTok{3}\NormalTok{,}\DecValTok{1}\NormalTok{:}\DecValTok{2}\NormalTok{])/}\DecValTok{2}\NormalTok{,}\OtherTok{NA}\NormalTok{)}
+\NormalTok{divmatrix2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        A-B      C
+## A-B     NA 0.0155
+## C   0.0155     NA
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#find pair with minimum per site differences}
+\KeywordTok{which}\NormalTok{(divmatrix2 ==}\StringTok{ }\KeywordTok{min}\NormalTok{(divmatrix2,}\DataTypeTok{na.rm=}\NormalTok{T),T)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     row col
+## C     2   1
+## A-B   1   2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#record number of per site differences}
+\NormalTok{y2 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"A-B-C"}\NormalTok{,}\KeywordTok{min}\NormalTok{(divmatrix2,}\DataTypeTok{na.rm=}\NormalTok{T))}
+
+\NormalTok{y <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(y1,y2)}
+\KeywordTok{colnames}\NormalTok{(y) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"NeighborsJoined"}\NormalTok{,}\StringTok{"TiptoMRCADistance"}\NormalTok{)}
+\KeywordTok{data.frame}\NormalTok{(y)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    NeighborsJoined TiptoMRCADistance
+## y1             A-B             0.006
+## y2           A-B-C            0.0155
+\end{verbatim}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{fig3.jpg}
+\caption{\label{fig:njtree}Neighbor Joining Tree based on data from Bryc et. al (2009).}
+\end{figure}
+
+\subsection{Given the divergence time between A and B and the number of
+observed differences, what is the estimated mutation rate for these
+species? (5
+pts)}\label{given-the-divergence-time-between-a-and-b-and-the-number-of-observed-differences-what-is-the-estimated-mutation-rate-for-these-species-5-pts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{abdivergetime <-}\StringTok{ }\DecValTok{2000000}     \CommentTok{#divergence time between A and B in years}
+\NormalTok{abdiff <-}\StringTok{ }\DecValTok{6}\NormalTok{/}\DecValTok{1000}             \CommentTok{#per site differences between A and B}
+\NormalTok{acdiff <-}\StringTok{ }\DecValTok{14}\NormalTok{/}\DecValTok{1000}            \CommentTok{#per site differences between A and C}
+\NormalTok{bcdiff <-}\StringTok{ }\DecValTok{17}\NormalTok{/}\DecValTok{1000}            \CommentTok{#per site differences between B and C}
+\NormalTok{gtime <-}\StringTok{ }\DecValTok{3}                   \CommentTok{#generation time}
+
+
+\NormalTok{abdivergegen <-}\StringTok{ }\NormalTok{abdivergetime/gtime     }\CommentTok{#divergence time between A and B in generations}
+
+\NormalTok{mu =}\StringTok{ }\NormalTok{abdiff /}\StringTok{ }\NormalTok{(abdivergegen *}\StringTok{ }\DecValTok{2}\NormalTok{)        }
+\NormalTok{mu}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 4.5e-09
+\end{verbatim}
+
+Thus, the mutation rate is 4.5 x 10$^{-9}$ per site per generation
+\#\#Assuming the same mutation rate for species C, what is the
+divergence time between A and C? What about between B and C? (5 pts)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{acdivergegen =}\StringTok{ }\NormalTok{acdiff /}\StringTok{ }\NormalTok{(}\DecValTok{2}\NormalTok{*mu)}
+\NormalTok{acdivergetime =}\StringTok{ }\NormalTok{acdivergegen *}\StringTok{ }\NormalTok{gtime}
+\NormalTok{acdivergetime}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 4666667
+\end{verbatim}
+
+Thus, the divergence time between A and C is approximately 4.7 million
+years.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{bcdivergegen =}\StringTok{ }\NormalTok{bcdiff /}\StringTok{ }\NormalTok{(}\DecValTok{2}\NormalTok{*mu)}
+\NormalTok{bcdivergetime =}\StringTok{ }\NormalTok{bcdivergegen *}\StringTok{ }\NormalTok{gtime}
+\NormalTok{bcdivergetime}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 5666667
+\end{verbatim}
+
+Thus, the divergence time between A and C is approximately 5.7 million
+years. \#\#What is the estimated divergence time since the last common
+ancestor of A, B, and C? (5 pts)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{abcdivergegen =}\StringTok{ }\FloatTok{0.0155} \NormalTok{/}\StringTok{ }\NormalTok{(}\DecValTok{2}\NormalTok{*mu)}
+\NormalTok{abcdivergetime =}\StringTok{ }\NormalTok{abcdivergegen *}\StringTok{ }\NormalTok{gtime}
+\NormalTok{abcdivergetime}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 5166667
+\end{verbatim}
+
+Thus, the divergence time since the last common ancestor between A, B,
+and C is approximately 5.2 million years.
+
+\end{document}
