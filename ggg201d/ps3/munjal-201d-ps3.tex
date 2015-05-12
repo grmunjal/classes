@@ -1,0 +1,498 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+    \usepackage{xltxtra,xunicode}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{{#1}}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{{#1}}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{{#1}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{{#1}}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{{#1}}}
+\newcommand{\RegionMarkerTok}[1]{{#1}}
+\newcommand{\ErrorTok}[1]{\textbf{{#1}}}
+\newcommand{\NormalTok}[1]{{#1}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\ifxetex
+  \usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \usepackage[unicode=true]{hyperref}
+\fi
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={Gitanshu Munjal},
+            pdftitle={Problem Set 3},
+            colorlinks=true,
+            citecolor=blue,
+            urlcolor=blue,
+            linkcolor=magenta,
+            pdfborder={0 0 0}}
+\urlstyle{same}  % don't use monospace font for urls
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\setcounter{secnumdepth}{0}
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+\setlength{\droptitle}{-2em}
+  \title{Problem Set 3}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{Gitanshu Munjal}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \predate{\centering\large\emph}
+  \postdate{\par}
+  \date{Saturday, May 9, 2015}
+
+
+
+
+\begin{document}
+
+\maketitle
+
+
+\section{Problem 1}\label{problem-1}
+
+\subsection{Generate a specific graph to display the properties of
+selection in large
+populations.}\label{generate-a-specific-graph-to-display-the-properties-of-selection-in-large-populations.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{#############################}
+\CommentTok{# Selection in Large Pops}
+\NormalTok{#############################}
+
+\CommentTok{#Given Information (s, step size, scenarios)}
+\NormalTok{for(s in }\KeywordTok{c}\NormalTok{(}\FloatTok{0.1}\NormalTok{,}\FloatTok{0.4}\NormalTok{))\{}
+
+\NormalTok{plotdata <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{G0Freq=}\KeywordTok{rep}\NormalTok{(}\KeywordTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\FloatTok{0.01}\NormalTok{),}\DecValTok{3}\NormalTok{),}
+                       \DataTypeTok{Scenario =} \KeywordTok{rep}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"Dominant"}\NormalTok{,}\StringTok{"Recessive"}\NormalTok{,}\StringTok{"Additive"}\NormalTok{),}
+                                      \KeywordTok{c}\NormalTok{(}\DecValTok{101}\NormalTok{,}\DecValTok{101}\NormalTok{,}\DecValTok{101}\NormalTok{)),}
+                       \DataTypeTok{s_homo=}\DecValTok{0}\NormalTok{,                                  }\CommentTok{# s for adv. homozygote}
+                       \DataTypeTok{s_hetero=}\KeywordTok{rep}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,s,s/}\DecValTok{2}\NormalTok{),}\KeywordTok{c}\NormalTok{(}\DecValTok{101}\NormalTok{,}\DecValTok{101}\NormalTok{,}\DecValTok{101}\NormalTok{)))   }\CommentTok{# s for heterozygote}
+
+\CommentTok{#Frequency of advantageous allele in G1}
+\NormalTok{plotdata$G1Freq =}\StringTok{ }
+\CommentTok{#Numerator  = f(adv_hom)*(1-s_adv_hom) + (1/2)*f(het)*(1-s_het)}
+\StringTok{  }\NormalTok{(}
+    \NormalTok{(plotdata$G0Freq)^}\DecValTok{2} \NormalTok{*}\StringTok{ }\NormalTok{(}\DecValTok{1}\NormalTok{-plotdata$s_homo) +}
+\StringTok{      }\NormalTok{(}\FloatTok{0.5} \NormalTok{*}\StringTok{ }\NormalTok{(}\DecValTok{2}\NormalTok{*(plotdata$G0Freq)*(}\DecValTok{1} \NormalTok{-}\StringTok{ }\NormalTok{plotdata$G0Freq))  *}\StringTok{ }\NormalTok{(}\DecValTok{1}\NormalTok{-plotdata$s_hetero))}
+    \NormalTok{) /}
+\StringTok{  }
+\CommentTok{#Denominator = f(adv_hom)*(1-s_adv_hom) + f(het)*(1-s_het) + f(del_hom)*(1-s_del_hom)}
+\StringTok{  }\NormalTok{(}
+    \NormalTok{(plotdata$G0Freq)^}\DecValTok{2} \NormalTok{*}\StringTok{ }\NormalTok{(}\DecValTok{1}\NormalTok{-plotdata$s_homo) +}
+\StringTok{      }\NormalTok{((}\DecValTok{2}\NormalTok{*(plotdata$G0Freq)*(}\DecValTok{1} \NormalTok{-}\StringTok{ }\NormalTok{plotdata$G0Freq))  *}\StringTok{ }\NormalTok{(}\DecValTok{1}\NormalTok{-plotdata$s_hetero)) +}
+\StringTok{      }\NormalTok{(}\DecValTok{1} \NormalTok{-}\StringTok{ }\NormalTok{plotdata$G0Freq)^}\DecValTok{2} \NormalTok{*}\StringTok{ }\NormalTok{(}\DecValTok{1} \NormalTok{-}\StringTok{ }\NormalTok{s)}
+      
+    \NormalTok{)}
+
+\CommentTok{#Delta F = f(adv_gen1) - f(adv_gen0)}
+\NormalTok{plotdata$deltaF =}\StringTok{ }\NormalTok{plotdata$G1Freq -}\StringTok{ }\NormalTok{plotdata$G0Freq  }
+
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\NormalTok{a <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(plotdata,}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{G0Freq, }\DataTypeTok{y=}\NormalTok{deltaF, }\DataTypeTok{colour=}\NormalTok{Scenario)) +}\StringTok{ }
+\StringTok{      }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{size=}\DecValTok{2}\NormalTok{, }\DataTypeTok{alpha=}\FloatTok{0.6}\NormalTok{) +}\StringTok{ }
+\StringTok{      }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=} \KeywordTok{paste}\NormalTok{(}\StringTok{"s for homozygous deleterious allele = "}\NormalTok{,s), }
+           \DataTypeTok{x=} \StringTok{"Frequency in Generation 0"}\NormalTok{, }\DataTypeTok{y=} \StringTok{"Delta F"}\NormalTok{)}
+
+\KeywordTok{print}\NormalTok{(a)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{munjal-201d-ps3_files/figure-latex/unnamed-chunk-1-1.pdf}
+\includegraphics{munjal-201d-ps3_files/figure-latex/unnamed-chunk-1-2.pdf}
+
+\begin{center}
+\line(1,0){250}
+\end{center}
+
+\pagebreak
+
+\section{Problem 2}\label{problem-2}
+
+\subsection{Four of the six plots from above are asymmetric. Explain the
+biological reason behind these asymmetric
+patterns.}\label{four-of-the-six-plots-from-above-are-asymmetric.-explain-the-biological-reason-behind-these-asymmetric-patterns.}
+
+The assymetric plots from above fall under two scenarios: (1) when the
+advantageous allele is dominant and (2) when the advantageous allele is
+recessive. Based on our knowledge of Hardy-Weinberg Equilibrium (HWE),
+we know that rare alleles in a population are found mostly in the
+heterozygotic state. Keeping this in mind, lets think about our
+scenarios from above one at a time.
+
+\subsubsection{Dominant Scenario}\label{dominant-scenario}
+
+When the advantageous allele is dominant, selection only acts on (and
+stops from contributing to the next generation) the deleterious
+homozygotic genotype since the heterozygote is indistinguishable (in
+terms of fitness) from the advantageous homozygote. Thus, only the
+advantageous homozygotic and the heterozygotic genotypes contribute
+alleles to the next generation if s(against deleterious homozygote) = 1.
+
+Note: if 0 \textless{} s \textless{} 1, a (1-s) proportion of
+deleterious homozygotes are able to contribute also.
+
+When the advantageous allele is at low frequency, its homozygotic state
+is much rare compared to its heterozygotic state (according to HWE). At
+this time (low frequency of advantageous allele), the population is
+composed mostly of deleterious recessive homozygotes and heterozygotes.
+Selection acts quickly (even more so if s is increased) to remove the
+abundant deleterious homozygotes and this drives the rapid change in
+allele frequency of the advantageous allele (rise of the green plots
+above) up until recessive homozygotes become rare and the population is
+mostly heterozygotes and advantageous homozygotes. The change/rise in
+allele frequency of the advantageous allele is much slower after that as
+the materials for selection (recessive homozygotes) are increasingly
+rarer and selection has to wait for them to appear as the heterozygotes
+segregate (fall of the green plots above).
+
+\subsubsection{Recessive Scenario}\label{recessive-scenario}
+
+When the advantageous allele is recessive, selection acts on (and stops
+from contributing to the next generation) the deleterious homozygotic
+and heterozygotic genotype. Thus, the advantageous homozygotic genotype
+is the sole contributor to the next generation if s = 1.
+
+Note: if 0 \textless{} s \textless{} 1, a (1-s) proportion of
+deleterious genotypes are able to contribute also.
+
+When the advantageous allele is at low frequency, its homozygotic state
+is much rare compared to its heterozygotic state (according to HWE). At
+this time (low frequency of advantageous allele), the population is
+composed mostly of deleterious homozygotes and heterozygotes. Even if
+the intensity of selection is the same as in the case for a dominant
+advantageous allele, the frequency of the advantageous allele does not
+change much (dip in the rise of the blue plot above) till the
+advantageous recessive homozygotes become easier to find. Subsequently,
+the frequency of the advantageous allele rises faster than previous but
+still slower compared to the dominance scenario as only one genotype
+contributes to the increase (rise of the blue plot). The fall of the
+blue plot is steep because the frequency of the advantageous allele is
+high and selection quickly drives this to fixation by removing a
+propotion (s) of the deleterious genotypes.
+
+\begin{center}
+\line(1,0){250}
+\end{center}
+
+\pagebreak
+
+\section{Problem 3}\label{problem-3}
+
+\subsection{Explain the difference between coalescent effective
+population size (Ne) and instantaneous Ne? What are two ways to estimate
+coalescent Ne? What is one way to estimate instantaneous
+Ne?}\label{explain-the-difference-between-coalescent-effective-population-size-ne-and-instantaneous-ne-what-are-two-ways-to-estimate-coalescent-ne-what-is-one-way-to-estimate-instantaneous-ne}
+
+\subsubsection{Instantaneous $N_e$}\label{instantaneous-nux5fe}
+
+Instantaneous effective population size of a population is the size of a
+Wright-Fisher population that experiences the same magnitude of genetic
+drift as the actual population under consideration. Instantaneous $N_e$
+``enables us to draw inferences concerning the evolutionary effects of
+finite population size by providing a mechanism for incorporating
+factors that result in deviations from the ideal \cite{hed}.'' Factors
+here referring to scenarios of unbalanced sex ratios, variation in
+offspring number, etc.
+
+One way to estimate instantaneous $N_e$ is to collect random individuals
+from successive generations of a population and genotype these at a
+large number of loci. Subsequently, one could estimate the change in
+frequencies at these different loci between successive generations.
+These data from all the loci genotyped could then be used to estimate
+the maximum likelihood size of a Wright-Fisher population that fit these
+data.
+
+\subsubsection{Coalescent $N_e$}\label{coalescent-nux5fe}
+
+Coalescent effective population size of a population is ``an estimate of
+the equilibrium or average $N_e$ over a long period\ldots{}it is
+primarily determined by the cumulative impacts of mutation and genetic
+drift \cite{hed}.'' For the sake of explanation, consider a population
+going through bottlenecks and other demographic events over evolutionary
+time (so that instantaneous $N_e$ fluctuates through time) and yielding
+a coalescent $N_e$ estimate of 2N. Then, the amount of diversity
+retained by this population will be equal in amount to the amount of
+diversity retained by a population with a constant $N_e$ = 2N.
+
+Coalescent $N_e$ can be estimated using the relation $\theta$ =
+$4N_{e}\mu$. The value for $\theta$ can be estimated using Tajima's
+logic ($\pi$ = $\theta_{\pi}$ = $4N_{e}\mu$, where $\pi$ is the observed
+mean mutations between multiple pairs of 2 random gene copies) or using
+Watterson's logic ($s/(\sum\limits_{k=1}^{n-1} \frac{1}{k}$ =
+$\theta_{s}$ = $4N_{e}\mu$, where $s$ is the number of segregating
+sites)
+
+\begin{center}
+\line(1,0){250}
+\end{center}
+
+\pagebreak
+
+\section{Problem 4}\label{problem-4}
+
+\subsection{Generate a specific graph to display the properties of the
+coalescent process in a Wright-Fisher population. The x-axis should be
+number of gene copies and range from 2-80. The y-axis should be number
+of generations in N units. Perform calculations in steps of one gene
+copy and plot the following three expectations: (1) time to the first
+coalescent event; (2) time to the most recent common ancestor of all
+gene copies; (3) total tree
+length.}\label{generate-a-specific-graph-to-display-the-properties-of-the-coalescent-process-in-a-wright-fisher-population.-the-x-axis-should-be-number-of-gene-copies-and-range-from-2-80.-the-y-axis-should-be-number-of-generations-in-n-units.-perform-calculations-in-steps-of-one-gene-copy-and-plot-the-following-three-expectations-1-time-to-the-first-coalescent-event-2-time-to-the-most-recent-common-ancestor-of-all-gene-copies-3-total-tree-length.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{rm}\NormalTok{(}\DataTypeTok{list=}\KeywordTok{ls}\NormalTok{())}
+
+\CommentTok{#Given Information (step size)}
+\NormalTok{plotdata <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{NumberOfGeneCopies =} \KeywordTok{seq}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{80}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+
+\CommentTok{#Time to 1st Coalescence = 4 * (1/( (k)*(k-1) ))}
+\NormalTok{plotdata$TimeTo1stCoalescence <-}\StringTok{ }
+\StringTok{  }
+\StringTok{  }\DecValTok{4} \NormalTok{/}\StringTok{ }\NormalTok{((plotdata$NumberOfGeneCopies)*(plotdata$NumberOfGeneCopies -}\StringTok{ }\DecValTok{1}\NormalTok{))}
+
+\CommentTok{#Time to MRCA = 4 * summationover2:k(1/( (k)*(k-1) ))}
+\NormalTok{plotdata$TimeToMRCA <-}\StringTok{ }\OtherTok{NA}
+\NormalTok{for (i in }\DecValTok{1}\NormalTok{:}\KeywordTok{nrow}\NormalTok{(plotdata))\{}
+  
+  \NormalTok{k <-}\StringTok{ }\DecValTok{2}\NormalTok{:plotdata$NumberOfGeneCopies[i]}
+  \NormalTok{plotdata$TimeToMRCA[i] <-}\StringTok{ }\DecValTok{4} \NormalTok{*}\StringTok{ }\KeywordTok{sum}\NormalTok{( }\DecValTok{1} \NormalTok{/}\StringTok{ }\NormalTok{((k)*(k}\DecValTok{-1}\NormalTok{)) )}
+  
+\NormalTok{\}}
+
+\CommentTok{#Total Tree Length = 4 * summationover2:k(k/( (k)*(k-1) ))}
+\NormalTok{plotdata$TotalTreeLength <-}\StringTok{ }\OtherTok{NA}
+\NormalTok{for (i in }\DecValTok{1}\NormalTok{:}\KeywordTok{nrow}\NormalTok{(plotdata))\{}
+  
+  \NormalTok{k <-}\StringTok{ }\DecValTok{2}\NormalTok{:plotdata$NumberOfGeneCopies[i]}
+  \NormalTok{plotdata$TotalTreeLength[i] <-}\StringTok{ }\DecValTok{4} \NormalTok{*}\StringTok{ }\KeywordTok{sum}\NormalTok{( k /}\StringTok{ }\NormalTok{((k)*(k}\DecValTok{-1}\NormalTok{)) )}
+  
+\NormalTok{\}}
+
+
+\KeywordTok{library}\NormalTok{(gridExtra)}
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\NormalTok{c <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data=}\NormalTok{plotdata, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{NumberOfGeneCopies,}\DataTypeTok{y=}\NormalTok{TimeTo1stCoalescence)) +}\StringTok{ }
+\StringTok{      }\KeywordTok{geom_line}\NormalTok{() +}\StringTok{ }
+\StringTok{      }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x=}\StringTok{"Number Of Gene Copies"}\NormalTok{, }\DataTypeTok{y=}\StringTok{"1st Coalescence (N generations)"}\NormalTok{)}
+\NormalTok{m <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data=}\NormalTok{plotdata, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{NumberOfGeneCopies,}\DataTypeTok{y=}\NormalTok{TimeToMRCA)) +}\StringTok{ }\KeywordTok{geom_line}\NormalTok{() +}
+\StringTok{      }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x=}\StringTok{"Number Of Gene Copies"}\NormalTok{, }\DataTypeTok{y=}\StringTok{"Time to MRCA (N generations)"}\NormalTok{)  }
+\NormalTok{t <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data=}\NormalTok{plotdata, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{NumberOfGeneCopies,}\DataTypeTok{y=}\NormalTok{TotalTreeLength)) +}\StringTok{ }\KeywordTok{geom_line}\NormalTok{() +}
+\StringTok{      }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x=}\StringTok{"Number Of Gene Copies"}\NormalTok{, }\DataTypeTok{y=}\StringTok{"Total Tree Length (N generations)"}\NormalTok{)}
+\KeywordTok{grid.arrange}\NormalTok{(c,m,t,}\DataTypeTok{nrow=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{munjal-201d-ps3_files/figure-latex/unnamed-chunk-2-1.pdf}
+
+\section{Problem 5}\label{problem-5}
+
+\subsection{You sequence a 5.6 kb locus in 5 diploid individuals and
+observe 11 segregating sites. What is your estimate of theta in this
+population? What property of the expected coalescent tree is this
+estimate based on? What is your estimate of coalescent Ne assuming a
+mutation rate of 10\^{}-8 per bp per
+generation?}\label{you-sequence-a-5.6-kb-locus-in-5-diploid-individuals-and-observe-11-segregating-sites.-what-is-your-estimate-of-theta-in-this-population-what-property-of-the-expected-coalescent-tree-is-this-estimate-based-on-what-is-your-estimate-of-coalescent-ne-assuming-a-mutation-rate-of-10-8-per-bp-per-generation}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{rm}\NormalTok{(}\DataTypeTok{list=}\KeywordTok{ls}\NormalTok{())}
+
+\CommentTok{#Given Information}
+\NormalTok{locussize <-}\StringTok{ }\FloatTok{5.6} \NormalTok{*}\StringTok{ }\DecValTok{1000}                     \CommentTok{#5.6kb to bp}
+\NormalTok{k <-}\StringTok{ }\DecValTok{5} \NormalTok{*}\StringTok{ }\DecValTok{2}                                  \CommentTok{#chromosomes in 5 diploid individuals}
+\NormalTok{s <-}\StringTok{ }\DecValTok{11}                                     \CommentTok{#segregating sites}
+\NormalTok{mu <-}\StringTok{ }\NormalTok{(}\DecValTok{10}\NormalTok{)^(-}\DecValTok{8}\NormalTok{)                             }\CommentTok{#per bp mutation rate}
+
+\CommentTok{#Theta_s = s / summationover1:k-1(1/k)}
+\NormalTok{stheta <-}\StringTok{ }\NormalTok{(s) /}\StringTok{ }\NormalTok{( }\KeywordTok{sum}\NormalTok{( }\DecValTok{1}\NormalTok{/(}\DecValTok{1}\NormalTok{:(k}\DecValTok{-1}\NormalTok{)) ) )}
+\NormalTok{stheta}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 3.888343
+\end{verbatim}
+
+Thus, \textbf{$\theta_s$ = 3.89}.
+
+This estimate derives from the total tree length (formula mentioned in
+problem 4). Any mutations in the tree space give rise to segregating
+sites so that $E[s]$ = $TTL$ * $\mu$ and thus, $\mu$ = $E[s]$/$TTL$ (1).
+We also know that $\mu$ = $\theta$/$4N_e$ (2). From here one can solve
+(1) and (2), to derive:
+
+\[ \frac{s}{\sum\limits_{k=1}^{n-1} \frac{1}{k}} = \theta_{s} \]
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Coalescent_Ne = Theta_s/(4*mu)}
+\NormalTok{mulocus <-}\StringTok{ }\NormalTok{mu *}\StringTok{ }\NormalTok{locussize                   }\CommentTok{#mutation rate for locus}
+\NormalTok{coalNe <-}\StringTok{ }\NormalTok{stheta /}\StringTok{ }\NormalTok{(}\DecValTok{4} \NormalTok{*}\StringTok{ }\NormalTok{mulocus)            }
+\KeywordTok{round}\NormalTok{(coalNe,}\DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 17359
+\end{verbatim}
+
+Thus, coalescent $N_e$ \textbf{= 17359}
+
+\begin{center}
+\line(1,0){250}
+\end{center}
+
+\pagebreak
+
+\section{Problem 6}\label{problem-6}
+
+\subsection{If you sample 100 sets of four gene copies, each set has an
+actual time to the first coalescent event. Do you expect the number of
+sets that have an actual first coalescent before 2N/6 to be
+approximately equal to the number of sets to have an actual first
+coalescent after 2N/6? Explain your
+answer.}\label{if-you-sample-100-sets-of-four-gene-copies-each-set-has-an-actual-time-to-the-first-coalescent-event.-do-you-expect-the-number-of-sets-that-have-an-actual-first-coalescent-before-2n6-to-be-approximately-equal-to-the-number-of-sets-to-have-an-actual-first-coalescent-after-2n6-explain-your-answer.}
+
+\textbf{No}, I do not expect the number of sets that have an actual
+first coalescent before 2N/6 to be approximately equal to the number of
+sets to have an actual first coalescent after 2N/6.
+
+The response variable underlying this experiment (time to 1st
+coalescence event for 4 gene copies; replicated 100 times) essentially
+consists of \textbf{counts} (number of times it takes x generations)
+from \textbf{randomly chosen coalescence events}. The expected
+distribution for such a variable is a Poisson distribution as by
+definiton a Poisson distribution is a
+\textbf{discrete probability distribution for counts of occurence of rare events over a time/space interval}.
+Both the most frequent (mode) and middle(median) values of time for 1st
+coalescence would lie to the left of the mean (2N/6) and more of the
+area under the distribution lies to the left of the mean. Given these
+facts,
+\textbf{I expect the number of sets that have an actual first coalescent before 2N/6 to be higher}
+than the number of sets that have an actual first coalescent after 2N/6.
+This conclusion was also supported by ms simulations \cite{ms}
+
+Command used for simulations: ./ms 4 100 -t 2.2 -T \newline
+The tree output was parsed to retrieve time to 1st coalesence event.
+
+\vspace{35mm}
+
+\centerline{... CONTINUED ON NEXT PAGE ...}
+
+\pagebreak
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Read in filtered results (theta, time) from simulations}
+\NormalTok{ms <-}\StringTok{ }\KeywordTok{read.table}\NormalTok{(}\StringTok{"C:}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Users}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{gitanshu}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Desktop}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{ms.txt"}\NormalTok{,}
+                 \DataTypeTok{header=}\NormalTok{T, }\DataTypeTok{sep=}\StringTok{"}\CharTok{\textbackslash{}t}\StringTok{"}\NormalTok{)}
+\NormalTok{ms <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(ms)}
+
+\CommentTok{#Classify simulations with time greater than average time for a given sim(theta/popsize)}
+
+\NormalTok{ms$above <-}\StringTok{ }\OtherTok{NA}
+\NormalTok{ms[ms$theta==}\StringTok{"theta = 2.2"}\NormalTok{,}\DecValTok{3}\NormalTok{] <-}\StringTok{ }\NormalTok{ms[ms$theta==}\StringTok{"theta = 2.2"}\NormalTok{,}\DecValTok{2}\NormalTok{] >}\StringTok{ }
+\StringTok{                                                  }\FloatTok{0.17}
+
+\NormalTok{ms[ms$theta==}\StringTok{"theta = 22"}\NormalTok{,}\DecValTok{3}\NormalTok{] <-}\StringTok{ }\NormalTok{ms[ms$theta==}\StringTok{"theta = 22"}\NormalTok{,}\DecValTok{2}\NormalTok{] >}\StringTok{ }
+\StringTok{                                                  }\FloatTok{0.17}
+
+\NormalTok{ms[ms$theta==}\StringTok{"theta = 220"}\NormalTok{,}\DecValTok{3}\NormalTok{] <-}\StringTok{ }\NormalTok{ms[ms$theta==}\StringTok{"theta = 220"}\NormalTok{,}\DecValTok{2}\NormalTok{] >}\StringTok{ }
+\StringTok{                                                  }\FloatTok{0.17}
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\KeywordTok{library}\NormalTok{(gridExtra)}
+
+\NormalTok{a <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(ms, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{ms[ms$theta==}\StringTok{"theta = 2.2"}\NormalTok{,}\DecValTok{2}\NormalTok{], }
+                    \DataTypeTok{fill=}\NormalTok{ms[ms$theta==}\StringTok{"theta = 2.2"}\NormalTok{,}\DecValTok{3}\NormalTok{])) +}
+\StringTok{      }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =}\KeywordTok{paste}\NormalTok{(}\StringTok{"Theta = 2.2"}\NormalTok{, }\StringTok{"}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}\StringTok{"Count above expected mean = "}\NormalTok{,}
+                        \KeywordTok{table}\NormalTok{(ms[ms$theta==}\StringTok{"theta = 2.2"}\NormalTok{,}\DecValTok{3}\NormalTok{])[}\DecValTok{2}\NormalTok{]))}
+
+\NormalTok{b <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(ms, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{ms[ms$theta==}\StringTok{"theta = 22"}\NormalTok{,}\DecValTok{2}\NormalTok{], }
+                    \DataTypeTok{fill=}\NormalTok{ms[ms$theta==}\StringTok{"theta = 22"}\NormalTok{,}\DecValTok{3}\NormalTok{])) +}
+\StringTok{      }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =}\KeywordTok{paste}\NormalTok{(}\StringTok{"Theta = 22"}\NormalTok{, }\StringTok{"}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}\StringTok{"Count above expected mean = "}\NormalTok{,}
+                        \KeywordTok{table}\NormalTok{(ms[ms$theta==}\StringTok{"theta = 22"}\NormalTok{,}\DecValTok{3}\NormalTok{])[}\DecValTok{2}\NormalTok{]))}
+
+\NormalTok{c <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(ms, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{ms[ms$theta==}\StringTok{"theta = 220"}\NormalTok{,}\DecValTok{2}\NormalTok{], }
+                    \DataTypeTok{fill=}\NormalTok{ms[ms$theta==}\StringTok{"theta = 220"}\NormalTok{,}\DecValTok{3}\NormalTok{])) +}
+\StringTok{      }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =}\KeywordTok{paste}\NormalTok{(}\StringTok{"Theta = 220"}\NormalTok{, }\StringTok{"}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}\StringTok{"Count above expected mean = "}\NormalTok{,}
+                        \KeywordTok{table}\NormalTok{(ms[ms$theta==}\StringTok{"theta = 220"}\NormalTok{,}\DecValTok{3}\NormalTok{])[}\DecValTok{2}\NormalTok{]))}
+       
+\CommentTok{#Formatting}
+\NormalTok{z1 <-}\StringTok{ }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{binwidth=}\NormalTok{.}\DecValTok{03}\NormalTok{, }\DataTypeTok{alpha=}\NormalTok{.}\DecValTok{5}\NormalTok{, }\DataTypeTok{colour=}\StringTok{"black"}\NormalTok{,}\DataTypeTok{position=}\StringTok{"identity"}\NormalTok{) }
+
+\NormalTok{z2 <-}\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x=} \StringTok{"Time to 1st coalescence given 4 gene copies(4N generation units)"}\NormalTok{, }
+           \DataTypeTok{y=} \StringTok{"Count"}\NormalTok{)}
+\NormalTok{z3 <-}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"none"}\NormalTok{, }\DataTypeTok{plot.title =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{vjust=}\NormalTok{-}\DecValTok{4}\NormalTok{, }\DataTypeTok{hjust=}\FloatTok{0.9}\NormalTok{))}
+  
+\NormalTok{a <-}\StringTok{ }\NormalTok{a +}\StringTok{ }\NormalTok{z1 +}\StringTok{ }\NormalTok{z2 +}\StringTok{ }\NormalTok{z3}
+\NormalTok{b <-}\StringTok{ }\NormalTok{b +}\StringTok{ }\NormalTok{z1 +}\StringTok{ }\NormalTok{z2 +}\StringTok{ }\NormalTok{z3}
+\NormalTok{c <-}\StringTok{ }\NormalTok{c +}\StringTok{ }\NormalTok{z1 +}\StringTok{ }\NormalTok{z2 +}\StringTok{ }\NormalTok{z3}
+\KeywordTok{grid.arrange}\NormalTok{(a, b, c,}\DataTypeTok{nrow=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{munjal-201d-ps3_files/figure-latex/unnamed-chunk-5-1.pdf}
+
+\bibliographystyle{acm}
+
+\bibliography{bibi}
+
+\end{document}
