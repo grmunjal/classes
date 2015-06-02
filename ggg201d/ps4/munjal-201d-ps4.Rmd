@@ -1,0 +1,283 @@
+---
+title: "Problem Set 4"
+author: "Gitanshu Munjal"
+date: "Saturday, May 30, 2015"
+output:
+  pdf_document:
+    highlight: tango
+    keep_tex: yes
+---
+
+#Problem 1
+
+##The current mean yearling weight is 900 pounds. You are excited by a young bull named Ghost in your population that had a yearling weight of 1200 pounds. You mate Ghost to many random cows from your population and measure the yearling weight of all the progeny. You are disappointed to find that the mean progeny weight is only 850 pounds.
+```{r}
+#Given Information
+mu    <- 900               #current mean yearling weight
+ghost <- 1200              #yearling weight of ghost
+mup   <- 850               #mean half-sib progeny weight
+```
+
+###a) What is your estimate of Ghost's breeding value?
+```{r}
+#Estimated Breeding Value
+progenydifference = mup - mu
+breedingvalue = 2 * progenydifference
+breedingvalue
+```
+Thus, the estimate of Ghost's breeding value is \textbf{-100 pounds}.
+
+###b) Provide two possible explanations for how Ghost could have had such a high yearling weight but produced progeny with a relatively low mean yearling weight. Your explanations should use components of the genetic model for quantitative traits.
+The model for phenotypic value of quantitative traits is composed of the breeding value, the allele combination value, and the environmental effect. Ghose has a negative breeding value (= progeny mean less than population mean) but a higher than population mean phenotypic value. This could have resulted from: 
+
+(1) A high environmental effect 
+
+(2) A high allele combination value
+\pagebreak
+
+###c) Imagine that the loci influencing yearling weight behave in a completely additive manner, i.e. there is no dominance or epistasis. Write the model with symbols and the corresponding numbers.
+$$P = \mu + BV + ACV + E$$
+$$1200 = 900 + (-100) +0 + 400$$
+Where,\newline
+P is the phenotypic value of the individual for the trait \newline
+$\mu$ is the population mean for the trait \newline
+BV is the breeding value of the individual for the trait \newline
+ACV is the allele combination value of the individual for the trait \newline
+E is the environmental effect experienced by the individual for the trait
+
+
+\begin{center}
+\line(1,0){250}
+\end{center} 
+\vspace{40mm}
+
+\centerline{... CONTINUED ON NEXT PAGE ...}
+
+\pagebreak
+
+#Problem 2
+
+##A single diallelic locus controls length at hatching in your population of trout. This trait is not influenced by the environment and individuals with the genotypes HH, Hh, and hh have lengths of 100, 100, and 150 mm respectively. The population is in Hardy-Weinburg equilibrium and the H allele frequency is 0.6.
+```{r}
+#Given Information
+pHH <- 100                   #phenotypic values
+pHh <- 100
+phh <- 150
+
+a <- freqH <- 0.6            #frequency of H allele
+b <- freqh <- 1-a            #frequency of h allele
+```
+
+###a) What is the population mean for hatching length?
+```{r}
+#Population Mean
+populationmean <- (a^2)*(pHH) + (2*a*b)*(pHh) + (b^2)*(phh)
+populationmean
+```
+Thus, the population mean for hatching length is \textbf{108 mm}.
+
+###b) What are the genotypic values of the HH, Hh, and hh genotypes?
+```{r}
+#Genotypic Values
+gHH = pHH - populationmean
+gHh = pHh - populationmean
+ghh = phh - populationmean
+
+data.frame(gHH,gHh,ghh)
+```
+Thus, the \textbf{genotypic values of the HH, Hh, and hh genotypes are -8 mm, -8 mm, and +42 mm respectively.}
+
+###c) Which of the genotypic values would change if the frequency of allele H in the population 	changed to 0.8? Explain your answer.
+\textbf{All of the genotypic values would change} because the genotypic values depend on the population mean which in turn depends on allele frequencies as described in the previous questions.
+
+\begin{center}
+\line(1,0){250}
+\end{center} 
+
+#Problem 3
+
+##What does PA stand for, what does it mean, and what components of the genetic model for quantitative traits is it composed of?
+PA stands for the \textbf{producing ability} of an individual.  It is composed of the fixed effect/value componenets of the model i.e. \textbf{the breeding value, the allele combination value, and the permanent environmental effect.} It is the most important factor for repeated traits and refers to an individual's performance potential for such traits.
+
+\begin{center}
+\line(1,0){250}
+\end{center} 
+
+#Problem 4
+
+##You have a large, randomly mating swine population. You are interested in characterizing variation in backfat thickness, so you measure the trait in five boars. Their backfat thicknesses are 95, 110, 105, 95, and 95 mm.
+```{r}
+boardata <- data.frame(P = c(95, 110, 105, 95, 95) )                #Given Information
+
+SampleMean = sum(boardata$P) / nrow(boardata)                       #Mean
+
+boardata$sqdeviation = (boardata$P - SampleMean) ^ 2                #Squared Deviation
+
+SampleVariance = (sum(boardata$sqdeviation)) / (nrow(boardata) - 1) #Variance
+
+SampleStDev = round( (SampleVariance) ^ (1/2), 2)                   #Standard Deviation
+
+data.frame(SampleMean, SampleVariance, SampleStDev)
+```
+
+###a) What is your estimated mean for backfat thickness in this population?
+\textbf{100 mm}.
+
+###b) What is your estimated variance for backfat thickness in this population?
+\textbf{50 mm$^2$}.
+
+###c) What is your estimated standard deviation for backfat thickness in this population?
+\textbf{7.07 mm}
+
+\begin{center}
+\line(1,0){250}
+\end{center} 
+
+#Problem 5
+
+## In the same population as question 4, you measure the backfat thickness of many progeny from the five boars to estimate the breeding value of each boar. You then estimate the covariance between backfat thickness phenotypes and breeding values to be 20 mm2.
+```{r}
+#Given Information
+cov.p.bv <- 20
+var.p    <- SampleVariance                #From previous question
+mean.p   <- SampleMean                    #From previous question
+```
+
+###a) What is your estimate of heritability (h2) for backfat thickness in this population?
+```{r}
+#Heritability
+h2 = cov.p.bv / var.p
+h2
+```
+Thus, heriability for backfat population in this population is \textbf{0.4}.
+
+###b) You have a young boar with a backfat thickness of 120 mm. He has no progeny and you don't 	know who his parents are. What is your best estimate of his breeding value?
+```{r}
+#Estimated Breeding Value
+P <- 120
+ebv = h2 * (P - mean.p)
+ebv
+```
+Thus, his breeding value is \textbf{+8 mm}.
+
+\begin{center}
+\line(1,0){250}
+\end{center} 
+
+# Problem 6
+
+###You decide to start performing positive assortative mating...What do you expect would happen to heritability for backfat thickness after several generations of your new mating strategy? 
+$$h^{2} = \frac{V_{BV}}{V_{P}} = \frac{V_{BV}}{V_{BV} + V_{ACV} + V_{E}}$$
+Where symbols have their usual meaning.
+
+\textbf{Heritability will increase} as positive assortative mating will result in extreme breeding values which in turn will result in an increase in the variance of breeding values. This increase is reflected both in the numerator and denominator. As long as $V_{ACV}$ + $V_{E}$ > 0, this will result in an overall increase in heritability.
+
+\pagebreak
+
+#Problem 7
+
+##You start a wool farm and record the amount of wool each sheep produces each season. After two seasons, you decide to examine repeatability for wool yield. You find the standard deviation in wool yield to be 20 pounds in both seasons and the covariance between repeated wool yields to be 20 pounds2.
+```{r}
+#Given Information
+s.dev.season1 <- s.dev.season2 <- 20
+cov.season1.season2            <- 20
+```
+###a) What is your estimate of repeatability for wool yield?
+```{r}
+repeatability = (cov.season1.season2) / (s.dev.season1 * s.dev.season2)
+repeatability
+```
+Thus, repeatibility is \textbf{0.05}.
+
+###b) You buy some new sheep from the same original population and record their wool yields 	after one season to keep track of which individuals had low yields. Should you cull the sheep 	that produced a low yield after one season or give them another chance? Explain your answer.
+\textbf{No, it's not advisable to cull the sheep.} The repeatibility for wool yield is low (0.05 = 1 out of 20 times) and so it is unlikely that a low yield in the first season is a good predictor of future yields. Also:
+
+###c) One individual produced 30 pounds less wool than the population mean. What is your 	estimate of this individual's producing ability?
+```{r}
+DeivationFromPopulationMean = -30
+ProducingAbility = repeatability * DeivationFromPopulationMean
+ProducingAbility
+```
+Thus, the individual's producing ability is \textbf{-1.5} pounds.
+
+\begin{center}
+\line(1,0){250}
+\end{center} 
+
+#Problem 8
+
+###Your sheep population from question 7 has an average yearling weight of 50 pounds and a yearling weight heritability of 0.25... You are interested in producing a ram with an exceptionally high breeding value for yearling weight. Currently, your best ram has a breeding value of +3.5 pounds and your best ewe has a breeding value of +4.5 pounds. You mate them, and the ewe gives birth to a male lamb. You name him Champ.
+```{r}
+#Given Information
+mu  <- 50              #Population Mean
+h2  <- 0.25            #Heritability
+BVr <- +3.5            #BV of best ram
+BVe <- +4.5            #BV of best ewe
+```
+
+###a) What is your estimate of Champ's breeding value for yearling weight based on the 	information from his parents?
+```{r}
+(BVchamp = (BVr + BVe) / 2)
+```
+Thus, Champ's BV based on parent data is \textbf{+4 pounds}.
+
+###b) How much do you expect Champ to weight when he is one year old?
+```{r}
+ACV <- 0
+E   <- 0
+(P = mu + BVchamp + ACV  + E)
+```
+I expect champ to weigh \textbf{54 pounds under the assumption that the trait is completely additive}.
+	
+###You weigh Champ when he is one year old, and his weight is 56 pounds. What are two 	distinct possible reasons for the difference between his expected and actual yearling weight?
+(1) The assumptions in my model above were wrong and Champ is such a champ that his ACV and/or E are greater than 0.
+(2) Champ is such a champ that he inherited better than expected alleles from his parents.
+\pagebreak
+
+###What is your estimate of Champ's breeding value for yearling weight based on his own 	phenotypic record?
+```{r}
+P <- 56
+(ebv = h2 * (P - mu))
+```
+Thus, Champ's BV based on his own data is \textbf{+1.5 pounds}.
+
+\begin{center}
+\line(1,0){250}
+\end{center} 
+
+#Problem 9
+## You own a dairy. You have two young cows named Terri and Sherry. During their first lactations, Terri had a milk yield of +2,000 pounds and a fat content of +0.1 percent. Sherry had a milk yield of +1,000 pounds and a fat content of +0.2 percent. The repeatability in your population for milk yield is 0.2 and for percent fat is 0.8.
+```{r}
+#Given Information
+dairy <- data.frame(MilkYield = c(2000,1000), Fat = c(0.1,0.2))
+rownames(dairy) = c("Terri","Sherry")
+dairy
+
+repeatabilityMilk <- 0.2  
+repeatabilityFat  <- 0.8
+```
+
+###a) What are your estimates of Terri and Sherry's producing abilities for milk yield (MY) and fat content (FC)?
+```{r}
+#Estimates of PA
+dairy$MilkPA = repeatabilityMilk * dairy$MilkYield    #Milk yield
+dairy$FatPA  = repeatabilityFat  * dairy$Fat          #Fat Content
+subset(dairy,select=c(MilkPA,FatPA))
+```
+
+###b) Are you more confident that Terri is a better milk yield producer than Sherry or that Sherry is 	a better fat content producer than Terri? Explain your answer.
+I am more confident in the estimates from fat content because here I'm only considering \textbf{single performance records} and fat content has a \textbf{higher repeatability}. Thus, I am more confident that Sherry is a better fat content producer than Terri. 
+
+
+###c) If milk yield and percent fat were only influenced by temporary environmental effects and not by permanent environmental effects, what would be the broad sense heritability for each 	trait?
+If the traits were not influenced by permanent environmental effects then heritability for the traits would be equal to their respective repeatability because:
+$$Broad Sense Heritability = \frac{\sigma_{BV}^{2} + \sigma_{ACV}^{2}}{\sigma_{P}^{2}}$$
+
+$$repeatability = \frac{\sigma_{BV}^{2} + \sigma_{ACV}^{2} + \sigma_{E_{p}}^{2}}{\sigma_{P}^{2}}$$
+
+So, If $\sigma_{E_{p}}^{2} = 0$ Then, heritability = repeatability.
+
+\begin{center}
+\line(1,0){250}
+\end{center} 
+
