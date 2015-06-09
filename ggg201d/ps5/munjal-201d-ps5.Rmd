@@ -1,0 +1,276 @@
+---
+title: "Problem Set 5"
+author: "Gitanshu Munjal"
+date: "Saturday, June 06, 2015"
+output: pdf_document
+---
+
+#Problem 1
+
+##Name and describe the four factors that influence a population's rate of genetic change for a trait under selection.
+For a given trait under selection, a population's rate of genetic change can be mathematically desccribed as:
+
+$$\frac{\Delta BV}{t} = \frac{h * \sigma_{BV} * i}{L}$$
+
+Where,\newline
+$\Delta BV$ is the change in breeding value for the trait over time (t), \newline
+$h$ is the square root of the narrow sense heritability for the trait \newline
+$\sigma_{BV}$ is the square root of the variance for the trait \newline
+$L$ is the generation interval \newline
+$i$ is the intensity of selection \newline
+
+Thus, the four factors that influence a population's rate of genetic change for a given trait under selection are: (1) $i$, (2) $h$, (3) $\sigma_{BV}$, and (4) $L$. 
+
+The rate of genetic gain is directly proportial to the correlation between the breeding values and selection criteria (= accuracy = $r_{BV,P}$ = $h$), the amount of genetic variation for the trait (= $\sigma_{BV}$, and the intensity of selection (= $i$). The rate of genetic gain is inversely proportional to the time it takes to progress to a new generation (= generation time = $L$).
+
+\begin{center}
+\line(1,0){250}
+\end{center}
+\pagebreak
+
+#Problem 2
+
+##Your favorite trait in your favorite population has a heritability of 0.25. You are currently performing phenotypic selection, but your friend suggests that you start using progeny phenotypes to estimate breedings values and perform selection based on the estimates. Waiting for progeny phenotypes before performing selection would allow very accurate breeding value estimates but would also double the average generation interval. Could this strategy lead to an increased rate of genetic change?
+
+From Problem 1, we have:
+
+$$\frac{\Delta BV}{t} = \frac{h * \sigma_{BV} * i}{L}$$
+
+Under current phenotypic selection scheme, let:
+
+$$Rate\ of\ gain\ from\ phenotypic\ selection\ =\ \frac{\Delta BV}{t} = \frac{h * \sigma_{BV} * i}{L}$$
+
+using given $h^2 = 0.25$ and assuming constant $\sigma_{BV}$, $i$, and $L$. We have(1):
+
+$$Rate\ of\ gain\ from\ phenotypic\ selection\ =\ \frac{0.25^{1/2} * \sigma_{BV} * i}{L}\ =\ 0.5K$$
+
+Where K is a constant.
+
+Similarly under proposed progeny based election scheme, let (2):
+
+$$Rate\ of\ gain\ from\ progeny\ phenotypes\ =\ \frac{\Delta BV}{t} = \frac{h_{progeny} * \sigma_{BV} * i}{2L}\ = \frac{h_{progeny}K}{2}$$
+
+Using (1) and (2):
+If,
+$$Rate\ of\ gain\ from\ progeny\ phenotypes\ >\ Rate\ of\ gain\ from\ phenotypic\ selection$$
+Then,
+$$\frac{h_{progeny}K}{2}\ >\ 0.5K$$
+$$h_{progeny} > 1$$
+$$h_{progeny}^2 > 1$$
+
+Thus, it would appear that for the proposed strategy to lead to an increased rate of genetic change, the heritability would have to be greater than 1. We know that the values for heritability range from 0 to 1 and so it is safe to conclude that the proposed strategy will not lead to an increased rate of genetic change.
+
+\begin{center}
+\line(1,0){250}
+\end{center}
+
+
+#Problem 3
+
+##Your friend Barry likes to eat bacon so decides to start farming pigs. He buys many newborn piglets and raises them to adulthood. He then weighs them, selects the top 20% (i = 1.4), and randomly mates the selected individuals. The mean weight of the total population is 200 pounds, and the mean weight of the selected individuals is 214 pounds.
+  
+###a) What is the selection differential?
+```{r}
+populationmean <- 200
+selectedmean <- 214
+(s <- selectedmean - populationmean)
+```
+Thus, the selection differential is \textbf{+14 pounds}.
+
+###b) What is the standard deviation for adult weight in his population?
+```{r}
+i <- 1.4
+(sigmap <- s/i)
+````
+Thus, the standard deviation for adult weight in his population is \textbf{10 pounds}.
+
+##The selected pigs produce many progeny, and Barry raises them to adulthood. He weighs 	the adult progeny and their mean is 207 pounds. Barry knows little about genetics and is very 	surprised that the mean progeny weight is less than the mean parent weight despite being raised 	under the same conditions.
+
+###c) Explain to Barry why his best pigs produced progeny with a mean adult weight lower than 	their own.
+Dear Barry, you should not be surprised that the mean progeny weight is less than the mean parent weight despite being raised under the same conditions because \textbf{genes are inherited, genotypes are not}. The model for quantitative traits tells us that a phenotype (what we see) is composed of the genotype and the environment. It is likely that the selected parents had positive allele combination and/or environmental effects. The selected parents passed on their positive genes which lead to an increase in the progeny population mean (over the original population) but this increase was less than the mean weight of the parents because the parental genotypes had positive environmental effects and these are not inherited.
+
+\pagebreak
+
+###d) What is your estimate of heritability for adult weight in Barry's pig population?
+```{r}
+s                 <- s                                #from part a
+originalmean      <- 200
+newmean           <- 207
+GainFromSelection <- newmean - originalmean
+
+(heritability = GainFromSelection/s)
+```
+Thus, \textbf{heritability = 0.5}.
+
+###e) What would be the expected mean adult weight in Barry's population if he used the same 	selection and mating strategy for 5 years and his pigs had a mean generation interval of 6 	months?
+```{r}
+L            <- 0.5
+t            <- 5
+generations  <- t / L
+
+originalmean      <- originalmean                        #from part d
+GainPerGeneration <- GainFromSelection                   #from part d
+totalGain         <- GainFromSelection * generations
+
+(P <- originalmean + totalGain)
+```
+Thus, the expected mean adult weight in Barry's population if he used the same   selection and mating strategy for 5 years and his pigs had a mean generation interval of 6 	months would be \textbf{270 pounds}.
+
+###f) How much would the weight of Berry's population increase in one generation if he was able 	to determine the breeding value of each individual with perfect accuracy, and he selected the top 20% of individuals?
+```{r}
+heritability <- heritability                 #from part d
+sigmap       <- sigmap                       #from part a
+i            <- i                            #from part a
+
+sigmaBV = (heritability * (sigmap)^(2))  ^  (1/2)  
+
+#perfect accuracy
+heritability <- 1
+(Gain    = (heritability) ^ (1/2)  * i * sigmaBV)
+```
+Thus, the weight of Barry's population would increase approximately \textbf{10 pounds per generation}.
+
+###g) Barry randomly mates the individuals he selects. What other two mating strategies could he use, and how would implementing these influence the rate of genetic change?
+He could use positive assortative mating to increase breeding value variance and hence increase the rate of genetic change or he could use negative assortative mating to decrease breeding value variance and hence decrease the rate of genetic change.
+
+\begin{center}
+\line(1,0){250}
+\end{center}
+
+
+#Problem 4
+
+##You want to estimate the breeding value for yearling weight of your favorite bull using phenotypic records from his progeny. The mean yearling weight of his progeny is 10 pounds above the population mean.
+
+###a) What two pieces of information would you need to calculate the regression coefficient (b) for 	this prediction?
+The heritability ($h^2$) and the number of progeny (n) using the equation: 
+
+$$ 2(\frac{nh^2}{4+(n-1)h^2})$$
+
+###b) What are the minimum and maximum values you would expect the regression coefficient to 	be?
+Looking at the above equation, the expected \textbf{minimum value} for the regression coefficient would be \textbf{0} and this would occur when heritability is 0 or there are no progeny records. 
+
+Reducing the equation from part a for heritability = 1 (maximum), we have:
+
+$$ 2(\frac{n}{4+(n-1)}) = \frac{2n}{3+n}$$
+
+For large number of progeny, we can ignore the 3 in the denominator so that:
+
+$$ 2(\frac{n}{4+(n-1)}) = \frac{2n}{3+n} \approx \frac{2n}{n} = 2$$
+
+So the \textbf{maximum value} for the regression coefficient is \textbf{2}.
+
+
+###c) If the regression coefficient is 0.8, what is the estimated breeding value of your bull?
+```{r}
+b                 <- 0.8
+ProgenyDifference <- 10
+
+(EstimatedBV = b * ProgenyDifference)
+```
+Thus, my estimate of my bull's breeding value is \textbf{+8 pounds}.
+
+\begin{center}
+\line(1,0){250}
+\end{center}
+
+
+#Problem 5
+
+##Breeding values estimated using different sources of information have different accuracies. You could estimate a breeding value of a bull using records from his paternal half-siblings. You could also estimate the breeding value using records from his progeny. Which of these sources of information would provide a more accurate estimate and why?
+Accuracy of estimates relates to the heritability which in turn relates to the resemblance between relatives. The estimates using progeny records from the bull are likely more accurate because the progeny and the bull resemble each other (50%) more than the bull and the half-siblings (25%) do.
+
+
+\begin{center}
+\line(1,0){250}
+\end{center}
+
+
+#Problem 6
+
+##Genomic prediction uses a training population to develop an equation to predict the genetic merit of individuals for a particular trait. After the prediction equation has been developed, a different set of animals is used to determine prediction accuracy.
+	
+###a) Explain the process used to determine prediction accuracy. More specifically, what two 	pieces of information are needed for each animal and what statistical relationship between them 	describes the accuracy?
+The process used to determine prediction accuracy consists of estimating the \textbf{correlation between molecular breeding values and true breeding values}. The strength of the correlation describes the accuracy of genomic prediction. 
+
+Estimating molecular breeding values consists of reliably estimating breeding values from progeny testing in a training population, estimating the effect of each marker locus on the estimated breeding value, and then combining these data from genome-wide marker loci. 
+
+True breeding values can be obtained by generating a large number of progeny and using their phenotypic records.   
+
+###b) Would you consider this process of determining accuracy empirical or analytical?
+Empirical
+
+
+\begin{center}
+\line(1,0){250}
+\end{center}
+\pagebreak
+
+#Problem 7
+
+##A genomic selection program can change multiple components of the breeder's equation. Name at least two components and describe how they could be changed by the implementation of a genomic selection program.
+
+As we saw in problem 1, the rate of gain for a trait under selection depends on accuracy ($r_{BV,P}$ = $h$), generation interval (L), amount of genetic variation ($\sigma_{BV}$), and the intensity of selection (i). 
+
+Genomic selection could be used to reduce the generation interval by allowing early (developmentally) testing of individuals.
+
+Given that most of the newer genotyping technologies are high-throughput and cost effective, genomic selection could be used to increase the intensity of selection by testing a much larger number of progeny.
+
+\begin{center}
+\line(1,0){250}
+\end{center}
+
+
+#Problem 8
+
+##You acquire a pig farm with a population that has an equal number of females and males. To improve litter size, you can either (1) select for litter size by keeping the top 60% females and mating them with random males or (2) select for body weight by keeping the top 60% of females and the top 5% of males. The additive genetic correlation for little size and body weight is 0.45. Little size has a phenotypic variance of 7.84 and a heritability is 0.25. Body weight has a phenotypic variance of 2.25 and a heritability of 0.6.
+```{r}
+r.BV1.BV2 <- 0.45
+var.p.1    <- 7.84      #trait 1 = litter size
+h2.1       <- 0.25
+i.1        <- 0.64
+sigmaBV.1  <- (var.p.1 *h2.1) * (1/2)
+
+var.p.2    <- 2.25
+h2.2       <- 0.6 
+i.2.m      <- 2.06 
+i.2.f      <- 0.64
+```
+###a)What is the direct response to selection for litter size?
+```{r}
+(ResponseToSelection = ((h2.1) * (var.p.1)^(1/2) * (i.1))/2 )
+```
+\pagebreak
+
+###b) What is the indirect response in litter size by selecting for body weight?
+```{r}
+MaleResponseToIndirectSelection = r.BV1.BV2 * ((h2.2) ^(1/2)) * sigmaBV.1 * (i.2.m) 
+FemaleResponseToIndirectSelection = r.BV1.BV2 * ((h2.2) ^(1/2)) * sigmaBV.1 * (i.2.f)
+
+TotalResponse = (MaleResponseToIndirectSelection + FemaleResponseToIndirectSelection)/2
+TotalResponse
+```
+###c) Which selection strategy would produce the highest response in litter size and why? Give the 	reasonings behind your answer, not just numerical values.
+The second strategy would produce the highest response in litter size because (1) there is a strong genetic correlation between the body weight and litter size, (2) body weight has a higher heritability than litter size, and (3) both parents are controlled under the second strategy. 
+
+
+\begin{center}
+\line(1,0){250}
+\end{center}
+
+
+#Problem 9
+
+##Your sheep ranch has a terrible problem with foot rot. Each year, 75% of individuals develop the condition. You want to lower the incidence of foot rot, so you only use individuals that did not develop foot rot as parents for the next generation. If the incidence of foot rot in the next generation is 60%, what is the your estimate of heritability for developing foot rot?
+```{r}
+i  <-  s <-  1.27
+x1 <- 0.67
+x2 <- 0.25
+
+R = x1 - x2
+h2 = R/s
+h2
+```
+\begin{center}
+\line(1,0){250}
+\end{center}
