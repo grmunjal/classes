@@ -21,7 +21,7 @@ $i$ is the intensity of selection \newline
 
 Thus, the four factors that influence a population's rate of genetic change for a given trait under selection are: (1) $i$, (2) $h$, (3) $\sigma_{BV}$, and (4) $L$. 
 
-The rate of genetic gain is directly proportial to the correlation between the breeding values and selection criteria (= accuracy = $r_{BV,P}$ = $h$), the amount of genetic variation for the trait (= $\sigma_{BV}$, and the intensity of selection (= $i$). The rate of genetic gain is inversely proportional to the time it takes to progress to a new generation (= generation time = $L$).
+The rate of genetic gain is directly proportial to the correlation between the breeding values and selection criteria (= accuracy = $r_{BV,P}$ = $h$), the amount of genetic variation for the trait (= $\sigma_{BV}$), and the intensity of selection (= $i$). The rate of genetic gain is inversely proportional to the time it takes to progress to a new generation (= generation time = $L$).
 
 \begin{center}
 \line(1,0){250}
